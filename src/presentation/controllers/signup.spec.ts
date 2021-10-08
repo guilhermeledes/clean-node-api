@@ -22,7 +22,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('SignUp', () => {
-  test('shouldreturn 400 if no name is privided', () => {
+  test('should return 400 if no name is provided', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -36,7 +36,7 @@ describe('SignUp', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('name'))
   })
 
-  test('shouldreturn 400 if no email is privided', () => {
+  test('should return 400 if no email is provided', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -50,7 +50,7 @@ describe('SignUp', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
 
-  test('shouldreturn 400 if no password is privided', () => {
+  test('should return 400 if no password is provided', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -64,7 +64,7 @@ describe('SignUp', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test('shouldreturn 400 if no password_confirmation is privided', () => {
+  test('should return 400 if no password_confirmation is provided', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -78,7 +78,7 @@ describe('SignUp', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password_confirmation'))
   })
 
-  test('shouldreturn 400 if invalid email is privided', () => {
+  test('should return 400 if invalid email is provided', () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const httpRequest = {
