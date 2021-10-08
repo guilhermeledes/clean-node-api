@@ -1,12 +1,19 @@
 {
-  "name": "clean-node-api",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "Guilherme Ledes <ledes.guilherme@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^16.10.3",
-    "git-commit-msg-linter": "^3.2.8",
-    "typescript": "^4.4.3"
-  }
+    "name": "clean-node-api",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Guilherme Ledes <ledes.guilherme@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^16.10.3",
+        "@typescript-eslint/eslint-plugin": "^4.0.1",
+        "@typescript-eslint/parser": "^4.0.0",
+        "eslint": "^7.12.1",
+        "eslint-config-standard-with-typescript": "^21.0.1",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^5.0.0",
+        "git-commit-msg-linter": "^3.2.8",
+        "typescript": "^4.4.3"
+    }
 }
