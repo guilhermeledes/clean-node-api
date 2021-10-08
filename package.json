@@ -23,8 +23,8 @@
         "typescript": "^4.4.3"
     },
     "scripts": {
-        "test": "jest",
-        "test:staged": "jest",
+        "test": "jest --passWithNoTests",
+        "test:staged": "jest --passWithNoTests",
         "coverage": "jest --collect-coverage",
         "prepare": "husky install"
     }
