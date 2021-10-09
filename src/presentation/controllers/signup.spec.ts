@@ -30,7 +30,7 @@ describe('SignUp', () => {
       body: {
         email: 'test@example.com',
         password: 'test',
-        password_confirmation: 'test'
+        passwordConfirmation: 'test'
       }
     }
     const httpResponse = sut.handle(httpRequest)
@@ -44,7 +44,7 @@ describe('SignUp', () => {
       body: {
         name: 'test',
         password: 'test',
-        password_confirmation: 'test'
+        passwordConfirmation: 'test'
       }
     }
     const httpResponse = sut.handle(httpRequest)
@@ -58,7 +58,7 @@ describe('SignUp', () => {
       body: {
         name: 'test',
         email: 'test@example.com',
-        password_confirmation: 'test'
+        passwordConfirmation: 'test'
       }
     }
     const httpResponse = sut.handle(httpRequest)
@@ -66,7 +66,7 @@ describe('SignUp', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test('should return 400 if no password_confirmation is provided', () => {
+  test('should return 400 if no passwordConfirmation is provided', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -77,7 +77,7 @@ describe('SignUp', () => {
     }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('password_confirmation'))
+    expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirmation'))
   })
 
   test('should return 400 if password confirmation fails', () => {
@@ -87,12 +87,12 @@ describe('SignUp', () => {
         name: 'test',
         email: 'test@example.com',
         password: 'test',
-        password_confirmation: 'invalid'
+        passwordConfirmation: 'invalid'
       }
     }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new InvalidParamError('password_confirmation'))
+    expect(httpResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
   })
 
   test('should return 400 if invalid email is provided', () => {
@@ -103,7 +103,7 @@ describe('SignUp', () => {
         name: 'test',
         email: 'invalid-email',
         password: 'test',
-        password_confirmation: 'test'
+        passwordConfirmation: 'test'
       }
     }
     const httpResponse = sut.handle(httpRequest)
@@ -119,7 +119,7 @@ describe('SignUp', () => {
         name: 'test',
         email: 'test@example.com',
         password: 'test',
-        password_confirmation: 'test'
+        passwordConfirmation: 'test'
       }
     }
     sut.handle(httpRequest)
@@ -135,7 +135,7 @@ describe('SignUp', () => {
         name: 'test',
         email: 'test@example.com',
         password: 'test',
-        password_confirmation: 'test'
+        passwordConfirmation: 'test'
       }
     }
     const httpResponse = sut.handle(httpRequest)
