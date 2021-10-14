@@ -5,6 +5,7 @@
     "author": "Guilherme Ledes <ledes.guilherme@gmail.com>",
     "license": "MIT",
     "devDependencies": {
+        "@types/bcrypt": "^5.0.0",
         "@types/jest": "^27.0.2",
         "@types/node": "^16.10.3",
         "@types/validator": "^13.6.3",
@@ -33,6 +34,7 @@
         "prepare": "husky install"
     },
     "dependencies": {
+        "bcrypt": "^5.0.1",
         "validator": "^13.6.0"
     }
 }
