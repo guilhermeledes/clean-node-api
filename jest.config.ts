@@ -1,3 +1,5 @@
+import { defaults as tsjPreset } from 'ts-jest/presets'
+
 export default {
   roots: ['<rootDir>/src'],
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
@@ -6,7 +8,5 @@ export default {
   coverageProvider: 'v8',
   coverageDirectory: 'coverage',
   preset: '@shelf/jest-mongodb',
-  transform: {
-    '^.+\\.ts?$': 'ts-jest'
-  }
+  transform: tsjPreset.transform
 }
