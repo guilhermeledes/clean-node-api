@@ -65,14 +65,6 @@ const makeEmailValidator = (): EmailValidator => {
 }
 
 describe('SignUp', () => {
-  test('should return 400 if password confirmation fails', async () => {
-    const { sut } = makeSut()
-    const httpRequest = makeFakeHttpRequest()
-    httpRequest.body.passwordConfirmation = 'invalid_password'
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new InvalidParamError('passwordConfirmation')))
-  })
-
   test('should return 400 if invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
