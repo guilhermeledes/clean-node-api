@@ -35,6 +35,7 @@
         "start": "node build/main/server.js",
         "build": "rimraf build && tsc",
         "up": "npm run build && docker-compose up -d",
+        "down": "docker-compose down",
         "clear-test": "jest --clearCache",
         "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
         "test:verbose": "jest --passWithNoTests --runInBand",
