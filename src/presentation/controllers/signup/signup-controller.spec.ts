@@ -1,24 +1,37 @@
-import { AccountModel, AddAccount, AddAccountModel, HttpRequest } from './signup-controller-protocols'
+import { AccountModel, AddAccount, AddAccountModel, HttpRequest, Authentication } from './signup-controller-protocols'
 import { MissingParamError, ServerError } from '../../errors'
 import { SignUpController } from './signup-controller'
 import { badRequest, ok, serverError } from '../../helper/http/http-helper'
 import { Validation } from '../../protocols/validation'
+import { AuthenticationModel } from '../login/login-controller-protocols'
 
 interface SutTypes {
   sut: SignUpController
   addAccountStub: AddAccount
   validationStub: Validation
+  authenticationStub: Authentication
 }
 
 const makeSut = (): SutTypes => {
+  const authenticationStub = makeAuthentication()
   const addAccountStub = makeAddAccount()
   const validationStub = makeValidation()
-  const sut = new SignUpController(addAccountStub, validationStub)
+  const sut = new SignUpController(addAccountStub, validationStub, authenticationStub)
   return {
     sut,
     addAccountStub,
-    validationStub
+    validationStub,
+    authenticationStub
   }
+}
+
+const makeAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth (authentication: AuthenticationModel): Promise<string> {
+      return await new Promise(resolve => resolve('any_token'))
+    }
+  }
+  return new AuthenticationStub()
 }
 
 const makeValidation = (): Validation => {
@@ -92,5 +105,15 @@ describe('SignUp', () => {
     jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new MissingParamError('any_field'))
     const httpResponse = await sut.handle(makeFakeHttpRequest())
     expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
+  })
+
+  test('should call Authentication with correct values', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    await sut.handle(makeFakeHttpRequest())
+    expect(authSpy).toHaveBeenCalledWith({
+      email: 'any_mail@mail.com',
+      password: 'any_password'
+    })
   })
 })
