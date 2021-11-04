@@ -29,12 +29,14 @@
         "supertest": "^6.1.6",
         "ts-jest": "^27.0.5",
         "ts-node": "^10.2.1",
+        "ts-node-dev": "^1.1.8",
         "typescript": "^4.4.3"
     },
     "scripts": {
         "start": "node build/main/server.js",
         "build": "rimraf build && tsc",
-        "debug": "node --inspect=0.0.0.0:9222 --nolazy ./build/main/server.js",
+        "debug": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify --inspect=0.0.0.0:9222 --exit-child ./build/main/server.js",
+        "watch": "tsc -w",
         "up": "npm run build && docker-compose up -d",
         "down": "docker-compose down",
         "clear-test": "jest --clearCache",

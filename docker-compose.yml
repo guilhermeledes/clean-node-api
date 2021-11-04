@@ -15,11 +15,11 @@ services:
     image: node:14
     working_dir: /usr/src/clean-node-api
     restart: always
-    command: bash -c "npm install --only=prod && npm run debug"
+    command: bash -c "npm install --only=prod && npm install ts-node-dev -D --no-save  && npm run debug"
     environment:
       - MONGO_URL=${MONGO_URL}
     volumes:
-      - ./build:/usr/src/clean-node-api/build
+      - ./build/:/usr/src/clean-node-api/build
       - ./package.json:/usr/src/clean-node-api/package.json
     ports: 
       - "5050:5050"
