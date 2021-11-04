@@ -67,7 +67,7 @@ const makeFakeAccount = (): AccountModel => ({
   password: 'valid_password'
 })
 
-describe('SignUp', () => {
+describe('SignUpController', () => {
   test('should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
@@ -86,10 +86,10 @@ describe('SignUp', () => {
     expect(httpResponse).toEqual(serverError(new ServerError()))
   })
 
-  test('should return 200 if valid data is provided', async () => {
+  test('should return accessToken if valid data is provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeHttpRequest())
-    expect(httpResponse).toEqual(ok(makeFakeAccount()))
+    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
   })
 
   test('should call Validation with correct value', async () => {
