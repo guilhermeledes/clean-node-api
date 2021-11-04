@@ -15,7 +15,7 @@ services:
     image: node:14
     working_dir: /usr/src/clean-node-api
     restart: always
-    command: bash -c "npm install --only=prod && npm start"
+    command: bash -c "npm install --only=prod && npm run debug"
     environment:
       - MONGO_URL=${MONGO_URL}
     volumes:
@@ -23,5 +23,6 @@ services:
       - ./package.json:/usr/src/clean-node-api/package.json
     ports: 
       - "5050:5050"
+      - "9222:9222"
     links:
       - mongo

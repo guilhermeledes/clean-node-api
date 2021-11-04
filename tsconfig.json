@@ -4,7 +4,8 @@
     "module": "commonjs",
     "outDir": "build",
     "esModuleInterop": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "sourceMap": true,
   },
   "include": [
     "src"

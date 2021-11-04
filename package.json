@@ -34,6 +34,7 @@
     "scripts": {
         "start": "node build/main/server.js",
         "build": "rimraf build && tsc",
+        "debug": "node --inspect=0.0.0.0:9222 --nolazy ./build/main/server.js",
         "up": "npm run build && docker-compose up -d",
         "down": "docker-compose down",
         "clear-test": "jest --clearCache",
