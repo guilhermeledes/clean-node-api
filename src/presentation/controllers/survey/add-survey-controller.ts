@@ -1,4 +1,4 @@
-import { badRequest, serverError } from '../../helper/http/http-helper'
+import { badRequest, noContent, serverError } from '../../helper/http/http-helper'
 import { AddSurvey, Controller, HttpRequest, HttpResponse, Validation } from './add-survey-controller-protocols'
 
 export class AddSurveyController implements Controller {
@@ -20,12 +20,7 @@ export class AddSurveyController implements Controller {
         answers
       })
 
-      return {
-        statusCode: 200,
-        body: {
-          success: true
-        }
-      }
+      return noContent()
     } catch (error) {
       return serverError(error)
     }
