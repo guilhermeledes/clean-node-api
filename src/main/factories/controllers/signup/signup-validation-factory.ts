@@ -3,9 +3,9 @@ import {
   RequiredFieldValidation,
   CompareFieldsValidation,
   EmailValidation
-} from '../../../presentation/helper/validators'
-import { Validation } from '../../../presentation/protocols/validation'
-import { EmailValidatorAdapter } from '../../adapters/validators/email-validator-adapter'
+} from '../../../../presentation/helper/validators'
+import { Validation } from '../../../../presentation/protocols/validation'
+import { EmailValidatorAdapter } from '../../../adapters/validators/email-validator-adapter'
 
 const validations: Validation[] = ['name', 'email', 'password', 'passwordConfirmation']
   .map(
