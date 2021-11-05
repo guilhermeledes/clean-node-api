@@ -1,13 +1,13 @@
-import { AddSurveyModel, AddSuveyRepository } from './db-add-survey-protocols'
+import { AddSurveyModel, AddSurveyRepository } from './db-add-survey-protocols'
 import { DbAddSurvey } from './db-add-survey'
 
 interface SutTypes {
   sut: DbAddSurvey
-  addSuveyRepositoryStub: AddSuveyRepository
+  addSuveyRepositoryStub: AddSurveyRepository
 }
 
 const makeSut = (): SutTypes => {
-  const addSuveyRepositoryStub = makeAddSuveyRepositoryStub()
+  const addSuveyRepositoryStub = makeAddSurveyRepositoryStub()
   const sut = new DbAddSurvey(addSuveyRepositoryStub)
   return {
     sut,
@@ -15,13 +15,13 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const makeAddSuveyRepositoryStub = (): AddSuveyRepository => {
-  class AddSuveyRepositoryStub implements AddSuveyRepository {
+const makeAddSurveyRepositoryStub = (): AddSurveyRepository => {
+  class AddSurveyRepositoryStub implements AddSurveyRepository {
     async add (surveyData: AddSurveyModel): Promise<void> {
       return await Promise.resolve()
     }
   }
-  return new AddSuveyRepositoryStub()
+  return new AddSurveyRepositoryStub()
 }
 
 const makeFakeSurveyData = (): AddSurveyModel => ({
@@ -32,7 +32,7 @@ const makeFakeSurveyData = (): AddSurveyModel => ({
 })
 
 describe('DbAddSurvey Usecase', () => {
-  test('Should call AddSuveyRepository with correct values', async () => {
+  test('Should call AddSurveyRepository with correct values', async () => {
     const { sut, addSuveyRepositoryStub } = makeSut()
     const surveyData = makeFakeSurveyData()
     const addSpy = jest.spyOn(addSuveyRepositoryStub, 'add')
@@ -40,7 +40,7 @@ describe('DbAddSurvey Usecase', () => {
     expect(addSpy).toHaveBeenCalledWith(surveyData)
   })
 
-  test('Should throw if AddSuveyRepository throws', async () => {
+  test('Should throw if AddSurveyRepository throws', async () => {
     const { sut, addSuveyRepositoryStub } = makeSut()
     jest.spyOn(addSuveyRepositoryStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
     const promise = sut.add(makeFakeSurveyData())
