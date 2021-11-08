@@ -8,6 +8,23 @@ import env from '../config/env'
 let surveyCollection: Collection
 let accountCollection: Collection
 
+const makeAccessToken = async (): Promise<string> => {
+  const res = await accountCollection.insertOne({
+    name: 'Ledes',
+    email: 'ledes@gmail.com',
+    password: '123',
+    role: 'admin'
+  })
+  const id = res.ops[0]._id
+  const accessToken = sign({ id }, env.jwtSecret)
+  await accountCollection.updateOne({
+    _id: id
+  }, {
+    $set: { accessToken }
+  })
+  return accessToken
+}
+
 describe('Survey Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL as string)
@@ -39,19 +56,7 @@ describe('Survey Routes', () => {
     })
 
     test('Should return 204 on add survey with accessToken', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'Ledes',
-        email: 'ledes@gmail.com',
-        password: '123',
-        role: 'admin'
-      })
-      const id = res.ops[0]._id
-      const accessToken = sign({ id }, env.jwtSecret)
-      await accountCollection.updateOne({
-        _id: id
-      }, {
-        $set: { accessToken }
-      })
+      const accessToken = await makeAccessToken()
       await request(app)
         .post('/api/surveys')
         .set({ 'x-access-token': accessToken })
@@ -70,41 +75,8 @@ describe('Survey Routes', () => {
     test('Should return 403 on load surveys without accessToken', async () => {
       await request(app)
         .get('/api/surveys')
-        .send({
-          question: 'any_question',
-          answers: [
-            { answer: 'any_answer', image: 'http://image-name.com' },
-            { answer: 'other_answer' }
-          ]
-        })
+        .send()
         .expect(403)
-    })
-
-    test('Should return 204 on load surveys with accessToken', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'Ledes',
-        email: 'ledes@gmail.com',
-        password: '123',
-        role: 'admin'
-      })
-      const id = res.ops[0]._id
-      const accessToken = sign({ id }, env.jwtSecret)
-      await accountCollection.updateOne({
-        _id: id
-      }, {
-        $set: { accessToken }
-      })
-      await request(app)
-        .get('/api/surveys')
-        .set({ 'x-access-token': accessToken })
-        .send({
-          question: 'any_question',
-          answers: [
-            { answer: 'any_answer', image: 'http://image-name.com' },
-            { answer: 'other_answer' }
-          ]
-        })
-        .expect(204)
     })
   })
 })
