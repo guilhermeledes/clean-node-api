@@ -16,6 +16,7 @@
         "@types/validator": "^13.6.3",
         "@typescript-eslint/eslint-plugin": "^4.0.1",
         "@typescript-eslint/parser": "^4.0.0",
+        "coveralls": "^3.1.1",
         "eslint": "^7.12.1",
         "eslint-config-standard-with-typescript": "^21.0.1",
         "eslint-plugin-import": "^2.22.1",
@@ -32,6 +33,17 @@
         "ts-node-dev": "^1.1.8",
         "typescript": "^4.4.3"
     },
+    "dependencies": {
+        "bcrypt": "^5.0.1",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "jsonwebtoken": "^8.5.1",
+        "mongodb": "^3.0.*",
+        "validator": "^13.6.0"
+    },
+    "engines": {
+        "node": "14.x"
+    },
     "scripts": {
         "start": "node build/main/server.js",
         "build": "rimraf build && tsc",
@@ -46,17 +58,7 @@
         "test:integration": "yarn test -- --watch -c jest.integration.config.ts",
         "test:staged": "yarn test -- --findRelatedTests",
         "test:ci": "yarn test -- --coverage",
+        "test:coveralls": "yarn test:ci && coveralls < coverage/lcov.info",
         "prepare": "husky install"
-    },
-    "dependencies": {
-        "bcrypt": "^5.0.1",
-        "dotenv": "^10.0.0",
-        "express": "^4.17.1",
-        "jsonwebtoken": "^8.5.1",
-        "mongodb": "^3.0.*",
-        "validator": "^13.6.0"
-    },
-    "engines": {
-        "node": "14.x"
     }
 }
