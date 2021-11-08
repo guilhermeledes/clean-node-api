@@ -8,6 +8,14 @@ import env from '../config/env'
 let surveyCollection: Collection
 let accountCollection: Collection
 
+const makeFakeSurvey = (prefix: string = 'any'): any => ({
+  question: `${prefix}_question`,
+  answers: [
+    { answer: `${prefix}_answer`, image: `${prefix}_image` }
+  ],
+  date: new Date()
+})
+
 const makeAccessToken = async (): Promise<string> => {
   const res = await accountCollection.insertOne({
     name: 'Ledes',
@@ -75,8 +83,16 @@ describe('Survey Routes', () => {
     test('Should return 403 on load surveys without accessToken', async () => {
       await request(app)
         .get('/api/surveys')
-        .send()
         .expect(403)
+    })
+
+    test('Should return 200 on load surveys with accessToken', async () => {
+      const accessToken = await makeAccessToken()
+      await surveyCollection.insertMany([makeFakeSurvey(), makeFakeSurvey('other')])
+      await request(app)
+        .get('/api/surveys')
+        .set({ 'x-access-token': accessToken })
+        .expect(200)
     })
   })
 })
