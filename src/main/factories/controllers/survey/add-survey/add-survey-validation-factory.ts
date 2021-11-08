@@ -1,5 +1,5 @@
-import { Validation } from '../../../../presentation/controllers/survey/add-survey-controller-protocols'
-import { RequiredFieldValidation, ValidationComposite } from '../../../../validation/validators'
+import { Validation } from '../../../../../presentation/controllers/survey/add-survey/add-survey-controller-protocols'
+import { RequiredFieldValidation, ValidationComposite } from '../../../../../validation/validators'
 
 const validations: Validation[] = ['question', 'answers']
   .map(
