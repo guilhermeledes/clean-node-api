@@ -4,6 +4,7 @@
     "main": "index.js",
     "author": "Guilherme Ledes <ledes.guilherme@gmail.com>",
     "license": "MIT",
+    "repository": "github.com/guilhermeledes/clean-node-api",
     "devDependencies": {
         "@shelf/jest-mongodb": "^2.1.0",
         "@types/bcrypt": "^5.0.0",
@@ -28,6 +29,7 @@
         "lint-staged": "^11.2.0",
         "mockdate": "^3.0.5",
         "rimraf": "^3.0.2",
+        "shx": "^0.3.3",
         "supertest": "^6.1.6",
         "ts-jest": "^27.0.5",
         "ts-node": "^10.2.1",
@@ -58,8 +60,8 @@
         "test:unit": "yarn test -- --watch -c jest.unit.config.ts",
         "test:integration": "yarn test -- --watch -c jest.integration.config.ts",
         "test:staged": "yarn test -- --findRelatedTests",
-        "test:ci": "yarn test -- --coverage",
-        "test:coveralls": "npm run test:ci && coveralls < ./coverage/lcov.info",
+        "test:ci": "npm run test -- --coverage",
+        "test:coveralls": "npm run test:ci --env=test && shx cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js --verbose",
         "prepare": "husky install"
     }
 }
