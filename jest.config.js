@@ -6,6 +6,7 @@ module.exports = {
     testPathIgnorePatterns: ['/node_modules/', '/dist/'],
     coverageDirectory: 'coverage',
     coveragePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
+    coverageReporters: ['text-summary', 'lcov'],
     preset: '@shelf/jest-mongodb',
     collectCoverageFrom: [
         '<rootDir>/src/**/*.ts',
