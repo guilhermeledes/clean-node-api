@@ -6,7 +6,7 @@ export class DbSaveSurveyResult implements SaveSurveyResult {
   ) {}
 
   async save (data: SaveSurveyResultModel): Promise<SurveyResultModel> {
-    await this.saveSuveyResultRepository.save(data)
-    return null
+    const surveyResult = await this.saveSuveyResultRepository.save(data)
+    return surveyResult
   }
 }
