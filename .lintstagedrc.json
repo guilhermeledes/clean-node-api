@@ -1,6 +1,6 @@
 {
     "*.ts": [
-        "eslint . --fix",
+        "eslint . --fix --ignore-pattern data",
         "npm run test:staged"
     ]
 }

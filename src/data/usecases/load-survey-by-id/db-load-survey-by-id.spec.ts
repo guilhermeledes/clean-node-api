@@ -1,5 +1,4 @@
-import { LoadSurveyByIdRepository } from '@/data/protocols/db/survey/load-survey-by-id-repository'
-import { SurveyModel } from '@/domain/models/survey'
+import { LoadSurveyByIdRepository, SurveyModel } from './db-load-survey-by-id-protocols'
 import MockDate from 'mockdate'
 import { DbLoadSurveyById } from './db-load-survey-by-id'
 
@@ -19,7 +18,7 @@ const makeSut = (): SutTypes => {
 
 const makeLoadSurveyByIdRepositoryStub = (): LoadSurveyByIdRepository => {
   class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
-    async loadById (id:string): Promise<SurveyModel> {
+    async loadById (id: string): Promise<SurveyModel> {
       return await Promise.resolve(makeFakeSurvey())
     }
   }
