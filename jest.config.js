@@ -3,9 +3,9 @@
 module.exports = {
     roots: ['<rootDir>/src'],
     testMatch: ['**/?(*.)+(spec|test).[t]s'],
-    testPathIgnorePatterns: ['/node_modules/', '/build/'],
+    testPathIgnorePatterns: ['/node_modules/', '/dist/'],
     coverageDirectory: 'coverage',
-    coveragePathIgnorePatterns: ['<rootDir>/build/', '<rootDir>/node_modules/'],
+    coveragePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
     preset: '@shelf/jest-mongodb',
     collectCoverageFrom: [
         '<rootDir>/src/**/*.ts',

@@ -47,9 +47,9 @@
         "node": "14.x"
     },
     "scripts": {
-        "start": "node build/main/server.js",
-        "build": "rimraf build && tsc",
-        "debug": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify --inspect=0.0.0.0:9222 --exit-child ./build/main/server.js",
+        "start": "node dist/main/server.js",
+        "build": "rimraf dist && tsc",
+        "debug": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify --inspect=0.0.0.0:9222 --exit-child ./dist/main/server.js",
         "watch": "tsc -w",
         "up": "npm run build && docker-compose up -d",
         "down": "docker-compose down",
