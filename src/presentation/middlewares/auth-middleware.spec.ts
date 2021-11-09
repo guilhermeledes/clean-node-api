@@ -8,7 +8,7 @@ import {
   HttpResponse
 } from './auth-middleware-protocols'
 
-interface SutTypes {
+type SutTypes = {
   sut: AuthMiddleware
   loadAccountByTokenStub: LoadAccountByToken
 }
