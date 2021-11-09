@@ -8,7 +8,7 @@ import {
 } from './db-authentication-protocols'
 import { DbAuthentication } from './db-authentication'
 
-interface SutTypes {
+type SutTypes = {
   sut: DbAuthentication
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   hashComparerStub: HashComparer
