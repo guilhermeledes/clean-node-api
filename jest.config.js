@@ -1,7 +1,5 @@
 /* eslint-disable eol-last */
 /* eslint-disable indent */
-const { defaults: tsjPreset } = require('ts-jest/presets')
-
 module.exports = {
     roots: ['<rootDir>/src'],
     testMatch: ['**/?(*.)+(spec|test).[t]s'],
@@ -9,5 +7,13 @@ module.exports = {
     coverageDirectory: 'coverage',
     coveragePathIgnorePatterns: ['<rootDir>/build/', '<rootDir>/node_modules/'],
     preset: '@shelf/jest-mongodb',
-    transform: tsjPreset.transform
+    collectCoverageFrom: [
+        '<rootDir>/src/**/*.ts',
+        '!<rootDir>/src/main/**'
+    ],
+    coverageProvider: 'babel',
+    testEnvironment: 'node',
+    transform: {
+        '.+\\.ts$': 'ts-jest'
+    }
 }
