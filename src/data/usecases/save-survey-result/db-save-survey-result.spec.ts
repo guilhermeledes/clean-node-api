@@ -29,7 +29,7 @@ const makeSaveSurveyResultRepositoryStub = (): SaveSurveyResultRepository => {
 const makeFakeSaveSurveyResult = (): SaveSurveyResultModel => ({
   accountId: 'any_account_id',
   surveyId: 'any_survey_id',
-  answers: 'any_answer',
+  answer: 'any_answer',
   date: new Date()
 })
 
