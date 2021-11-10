@@ -19,7 +19,7 @@ const makeSurvey = async (): Promise<SurveyModel> => {
     question: 'any_question',
     answers: [
       { answer: 'any_answer', image: 'any_image' },
-      { answer: 'other_answer' }
+      { answer: 'other_answer', image: 'other_image' }
     ],
     date: new Date()
   })
@@ -63,7 +63,7 @@ describe('SurveyResultMongoRepository', () => {
   })
 
   describe('save()', () => {
-    test('Should add a survey on success if its new', async () => {
+    test('Should add a surveyResult on success if its new', async () => {
       const survey = await makeSurvey()
       const account = await makeAccount()
       const sut = makeSut()
@@ -73,6 +73,21 @@ describe('SurveyResultMongoRepository', () => {
       expect(surveyResult.surveyId).toEqual(survey.id)
       expect(surveyResult.accountId).toEqual(account.id)
       expect(surveyResult.answer).toEqual(survey.answers[0].answer)
+      expect(surveyResult.date).toEqual(new Date())
+    })
+
+    test('Should update a surveyResult on success if its not new', async () => {
+      const survey = await makeSurvey()
+      const account = await makeAccount()
+      const res = await surveyResultCollection.insertOne(makeSaveSurveyResultModel(survey, account))
+      const newAnswer = survey.answers[1].answer
+      const sut = makeSut()
+      const surveyResult = await sut.save({ ...makeSaveSurveyResultModel(survey, account), answer: newAnswer })
+      expect(surveyResult).toBeTruthy()
+      expect(surveyResult.id).toEqual(res.ops[0]._id)
+      expect(surveyResult.surveyId).toEqual(survey.id)
+      expect(surveyResult.accountId).toEqual(account.id)
+      expect(surveyResult.answer).toEqual(newAnswer)
       expect(surveyResult.date).toEqual(new Date())
     })
   })
