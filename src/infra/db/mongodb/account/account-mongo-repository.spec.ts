@@ -44,10 +44,10 @@ describe('AccountMongoRepository', () => {
       await accountCollection.insertOne(makeFakeAccount())
       const account = await sut.loadByEmail('any_email@mail.com')
       expect(account).toBeTruthy()
-      expect(account?.id).toBeTruthy()
-      expect(account?.name).toBe('any_name')
-      expect(account?.email).toBe('any_email@mail.com')
-      expect(account?.password).toBe('any_password')
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('any_name')
+      expect(account.email).toBe('any_email@mail.com')
+      expect(account.password).toBe('any_password')
     })
 
     test('Should return null if loadByEmail fails', async () => {
@@ -74,10 +74,10 @@ describe('AccountMongoRepository', () => {
       await accountCollection.insertOne({ ...makeFakeAccount(), accessToken: 'any_token' })
       const account = await sut.loadByToken('any_token')
       expect(account).toBeTruthy()
-      expect(account?.id).toBeTruthy()
-      expect(account?.name).toBe('any_name')
-      expect(account?.email).toBe('any_email@mail.com')
-      expect(account?.password).toBe('any_password')
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('any_name')
+      expect(account.email).toBe('any_email@mail.com')
+      expect(account.password).toBe('any_password')
     })
 
     test('Should return an account on loadByToken with correct role', async () => {
@@ -85,10 +85,10 @@ describe('AccountMongoRepository', () => {
       await accountCollection.insertOne({ ...makeFakeAccount(), accessToken: 'any_token', role: 'any_role' })
       const account = await sut.loadByToken('any_token', 'any_role')
       expect(account).toBeTruthy()
-      expect(account?.id).toBeTruthy()
-      expect(account?.name).toBe('any_name')
-      expect(account?.email).toBe('any_email@mail.com')
-      expect(account?.password).toBe('any_password')
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('any_name')
+      expect(account.email).toBe('any_email@mail.com')
+      expect(account.password).toBe('any_password')
     })
 
     test('Should return null on loadByToken with invalid role', async () => {
@@ -103,10 +103,10 @@ describe('AccountMongoRepository', () => {
       await accountCollection.insertOne({ ...makeFakeAccount(), accessToken: 'any_token', role: 'admin' })
       const account = await sut.loadByToken('any_token')
       expect(account).toBeTruthy()
-      expect(account?.id).toBeTruthy()
-      expect(account?.name).toBe('any_name')
-      expect(account?.email).toBe('any_email@mail.com')
-      expect(account?.password).toBe('any_password')
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('any_name')
+      expect(account.email).toBe('any_email@mail.com')
+      expect(account.password).toBe('any_password')
     })
 
     test('Should return null if loadByToken fails', async () => {

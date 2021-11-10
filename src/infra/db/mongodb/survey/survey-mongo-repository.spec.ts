@@ -48,7 +48,9 @@ describe('SurveyMongoRepository', () => {
       const sut = makeSut()
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(2)
+      expect(surveys[0].id).toBeTruthy()
       expect(surveys[0].question).toEqual('any_question')
+      expect(surveys[1].id).toBeTruthy()
       expect(surveys[1].question).toEqual('other_question')
     })
 
@@ -60,10 +62,11 @@ describe('SurveyMongoRepository', () => {
   })
   describe('loadById()', () => {
     test('Should load survey by id on success', async () => {
-      const res = await surveyCollection.insertOne({ ...makeFakeSurvey(), _id: 'any_id' })
-      const fakeSurvey = res.ops[0]
+      await surveyCollection.insertOne({ ...makeFakeSurvey(), _id: 'any_id' })
+      const fakeSurvey = { ...makeFakeSurvey(), id: 'any_id' }
       const sut = makeSut()
       const survey = await sut.loadById('any_id')
+      expect(survey.id).toEqual('any_id')
       expect(survey).toEqual(fakeSurvey)
     })
   })
