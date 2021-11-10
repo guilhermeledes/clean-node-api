@@ -58,4 +58,13 @@ describe('SurveyMongoRepository', () => {
       expect(surveys.length).toBe(0)
     })
   })
+  describe('loadById()', () => {
+    test('Should load survey by id on success', async () => {
+      const res = await surveyCollection.insertOne({ ...makeFakeSurvey(), _id: 'any_id' })
+      const fakeSurvey = res.ops[0]
+      const sut = makeSut()
+      const survey = await sut.loadById('any_id')
+      expect(survey).toEqual(fakeSurvey)
+    })
+  })
 })
