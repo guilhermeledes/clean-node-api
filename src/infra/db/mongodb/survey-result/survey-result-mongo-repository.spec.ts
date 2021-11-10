@@ -4,7 +4,7 @@ import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 import MockDate from 'mockdate'
 import { SurveyModel } from '@/domain/models/survey'
 import { AccountModel } from '@/domain/models/account'
-import { SaveSurveyResultModel } from '@/domain/usecases/save-survey-result'
+import { SaveSurveyResultModel } from '@/domain/usecases/survey-result/save-survey-result'
 
 let surveyCollection: Collection
 let surveyResultCollection: Collection
