@@ -4,7 +4,7 @@ import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 import MockDate from 'mockdate'
 import { SurveyModel } from '@/domain/models/survey'
 import { AccountModel } from '@/domain/models/account'
-import { SaveSurveyResultModel } from '@/domain/usecases/survey-result/save-survey-result'
+import { SaveSurveyResultParams } from '@/domain/usecases/survey-result/save-survey-result'
 
 let surveyCollection: Collection
 let surveyResultCollection: Collection
@@ -35,7 +35,7 @@ const makeAccount = async (): Promise<AccountModel> => {
   return { ...res.ops[0], id: res.ops[0]._id }
 }
 
-const makeSaveSurveyResultModel = (survey: SurveyModel, account: AccountModel): SaveSurveyResultModel => ({
+const makeSaveSurveyResultParams = (survey: SurveyModel, account: AccountModel): SaveSurveyResultParams => ({
   surveyId: survey.id,
   accountId: account.id,
   answer: survey.answers[0].answer,
@@ -67,7 +67,7 @@ describe('SurveyResultMongoRepository', () => {
       const survey = await makeSurvey()
       const account = await makeAccount()
       const sut = makeSut()
-      const surveyResult = await sut.save(makeSaveSurveyResultModel(survey, account))
+      const surveyResult = await sut.save(makeSaveSurveyResultParams(survey, account))
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.id).toBeTruthy()
       expect(surveyResult.surveyId).toEqual(survey.id)
@@ -79,10 +79,10 @@ describe('SurveyResultMongoRepository', () => {
     test('Should update a surveyResult on success if its not new', async () => {
       const survey = await makeSurvey()
       const account = await makeAccount()
-      const res = await surveyResultCollection.insertOne(makeSaveSurveyResultModel(survey, account))
+      const res = await surveyResultCollection.insertOne(makeSaveSurveyResultParams(survey, account))
       const newAnswer = survey.answers[1].answer
       const sut = makeSut()
-      const surveyResult = await sut.save({ ...makeSaveSurveyResultModel(survey, account), answer: newAnswer })
+      const surveyResult = await sut.save({ ...makeSaveSurveyResultParams(survey, account), answer: newAnswer })
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.id).toEqual(res.ops[0]._id)
       expect(surveyResult.surveyId).toEqual(survey.id)

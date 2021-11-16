@@ -1,5 +1,5 @@
 import { Collection } from 'mongodb'
-import { AddSurveyModel } from '@/domain/usecases/survey/add-survey'
+import { AddSurveyParams } from '@/domain/usecases/survey/add-survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import MockDate from 'mockdate'
@@ -10,7 +10,7 @@ const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository()
 }
 
-const makeFakeSurvey = (prefix: string = 'any'): AddSurveyModel => ({
+const makeFakeSurvey = (prefix: string = 'any'): AddSurveyParams => ({
   question: `${prefix}_question`,
   answers: [
     { answer: `${prefix}_answer`, image: `${prefix}_image` }
