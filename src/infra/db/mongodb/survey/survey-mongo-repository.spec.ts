@@ -1,22 +1,14 @@
 import { Collection } from 'mongodb'
-import { AddSurveyParams } from '@/domain/usecases/survey/add-survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import MockDate from 'mockdate'
+import { mockAddSurveyParams } from '@/domain/test'
 
 let surveyCollection: Collection
 
 const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository()
 }
-
-const makeFakeSurvey = (prefix: string = 'any'): AddSurveyParams => ({
-  question: `${prefix}_question`,
-  answers: [
-    { answer: `${prefix}_answer`, image: `${prefix}_image` }
-  ],
-  date: new Date()
-})
 
 describe('SurveyMongoRepository', () => {
   beforeAll(async () => {
@@ -37,14 +29,14 @@ describe('SurveyMongoRepository', () => {
   describe('add()', () => {
     test('Should add a survey on success', async () => {
       const sut = makeSut()
-      await sut.add(makeFakeSurvey())
+      await sut.add(mockAddSurveyParams())
       const survey = await surveyCollection.findOne({ question: 'any_question' })
       expect(survey).toBeTruthy()
     })
   })
   describe('loadAll()', () => {
     test('Should load all surveys on success', async () => {
-      await surveyCollection.insertMany([makeFakeSurvey(), makeFakeSurvey('other')])
+      await surveyCollection.insertMany([mockAddSurveyParams(), mockAddSurveyParams('other')])
       const sut = makeSut()
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(2)
@@ -62,9 +54,9 @@ describe('SurveyMongoRepository', () => {
   })
   describe('loadById()', () => {
     test('Should load survey by id on success', async () => {
-      const res = await surveyCollection.insertOne(makeFakeSurvey())
+      const res = await surveyCollection.insertOne(mockAddSurveyParams())
       const id = res.ops[0]._id
-      const fakeSurvey = { ...makeFakeSurvey(), id }
+      const fakeSurvey = { ...mockAddSurveyParams(), id }
       const sut = makeSut()
       const survey = await sut.loadById(id)
       expect(survey.id).toEqual(id)

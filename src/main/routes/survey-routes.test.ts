@@ -2,36 +2,11 @@ import request from 'supertest'
 import app from '@/main/config/app'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
-import { sign } from 'jsonwebtoken'
-import env from '@/main/config/env'
+import { mockAddSurveyParams } from '@/domain/test'
+import { mockAccessToken } from '../test'
 
 let surveyCollection: Collection
 let accountCollection: Collection
-
-const makeFakeSurvey = (prefix: string = 'any'): any => ({
-  question: `${prefix}_question`,
-  answers: [
-    { answer: `${prefix}_answer`, image: `${prefix}_image` }
-  ],
-  date: new Date()
-})
-
-const makeAccessToken = async (): Promise<string> => {
-  const res = await accountCollection.insertOne({
-    name: 'Ledes',
-    email: 'ledes@gmail.com',
-    password: '123',
-    role: 'admin'
-  })
-  const id = res.ops[0]._id
-  const accessToken = sign({ id }, env.jwtSecret)
-  await accountCollection.updateOne({
-    _id: id
-  }, {
-    $set: { accessToken }
-  })
-  return accessToken
-}
 
 describe('Survey Routes', () => {
   beforeAll(async () => {
@@ -64,7 +39,7 @@ describe('Survey Routes', () => {
     })
 
     test('Should return 204 on add survey with accessToken', async () => {
-      const accessToken = await makeAccessToken()
+      const accessToken = await mockAccessToken(accountCollection, 'admin')
       await request(app)
         .post('/api/surveys')
         .set({ 'x-access-token': accessToken })
@@ -87,8 +62,8 @@ describe('Survey Routes', () => {
     })
 
     test('Should return 200 on load surveys with accessToken', async () => {
-      const accessToken = await makeAccessToken()
-      await surveyCollection.insertMany([makeFakeSurvey(), makeFakeSurvey('other')])
+      const accessToken = await mockAccessToken(accountCollection, 'admin')
+      await surveyCollection.insertMany([mockAddSurveyParams(), mockAddSurveyParams('other')])
       await request(app)
         .get('/api/surveys')
         .set({ 'x-access-token': accessToken })
