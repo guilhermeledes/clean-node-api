@@ -1,4 +1,4 @@
-import { HttpRequest, Authentication, Validation, AuthenticationModel } from './login-controller-protocols'
+import { HttpRequest, Authentication, Validation, AuthenticationParams } from './login-controller-protocols'
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@/presentation/helper/http/http-helper'
 import { LoginController } from './login-controller'
@@ -22,7 +22,7 @@ const makeSut = (): SutTypes => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationModel): Promise<string> {
+    async auth (authentication: AuthenticationParams): Promise<string> {
       return await new Promise(resolve => resolve('any_token'))
     }
   }

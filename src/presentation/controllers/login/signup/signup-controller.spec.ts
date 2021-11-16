@@ -1,9 +1,9 @@
-import { AccountModel, AddAccount, AddAccountModel, HttpRequest, Authentication } from './signup-controller-protocols'
+import { AccountModel, AddAccount, AddAccountParams, HttpRequest, Authentication } from './signup-controller-protocols'
 import { EmailInUseError, MissingParamError, ServerError } from '@/presentation/errors'
 import { SignUpController } from './signup-controller'
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helper/http/http-helper'
 import { Validation } from '@/presentation/protocols/validation'
-import { AuthenticationModel } from '@/presentation/controllers/login/login/login-controller-protocols'
+import { AuthenticationParams } from '@/presentation/controllers/login/login/login-controller-protocols'
 
 type SutTypes = {
   sut: SignUpController
@@ -27,7 +27,7 @@ const makeSut = (): SutTypes => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationModel): Promise<string> {
+    async auth (authentication: AuthenticationParams): Promise<string> {
       return await new Promise(resolve => resolve('any_token'))
     }
   }
@@ -53,7 +53,7 @@ const makeFakeHttpRequest = (): HttpRequest => (
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add (account: AddAccountModel): Promise<AccountModel> {
+    async add (account: AddAccountParams): Promise<AccountModel> {
       return await new Promise(resolve => resolve(makeFakeAccount()))
     }
   }
