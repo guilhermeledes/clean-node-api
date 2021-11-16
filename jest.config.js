@@ -9,7 +9,7 @@ module.exports = {
     testPathIgnorePatterns: ['/node_modules/', '/dist/'],
     coverageDirectory: 'coverage',
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src' }),
-    coveragePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/', 'protocols'],
+    coveragePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/', 'protocols', 'test'],
     coverageReporters: ['text-summary', 'lcov'],
     preset: '@shelf/jest-mongodb',
     collectCoverageFrom: [
