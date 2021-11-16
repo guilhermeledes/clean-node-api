@@ -9,7 +9,7 @@
         "start": "node dist/main/server.js",
         "build": "rimraf dist && tsc -p tsconfig.build.json",
         "debug": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify --inspect=0.0.0.0:9222 --exit-child ./dist/main/server.js",
-        "watch": "tsc -w",
+        "watch": "tsc -p tsconfig.build.json -w",
         "up": "npm run build && docker-compose up -d",
         "down": "docker-compose down",
         "clear-test": "jest --clearCache",
