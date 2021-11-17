@@ -7,6 +7,9 @@ import { survey } from './survey'
 import { surveys } from './surveys'
 import { surveyAnswer } from './survey-answer'
 import { addSurveyParams } from './add-survey-params'
+import { surveyResult } from './survey-result'
+import { surveyResultAnswer } from './survey-result-answer'
+import { saveSurveyParams } from './save-survey-params'
 
 export default {
   error,
@@ -17,5 +20,8 @@ export default {
   survey,
   surveys,
   surveyAnswer,
-  addSurveyParams
+  addSurveyParams,
+  surveyResult,
+  surveyResultAnswer,
+  saveSurveyParams
 }
