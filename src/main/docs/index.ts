@@ -9,9 +9,13 @@ import {
   account,
   error,
   loginParams,
-  apiKeyAuth
+  apiKeyAuth,
+  signUpParams
 } from './schemas'
-import { loginPath } from './paths/login'
+import {
+  loginPath,
+  signupPath
+} from './paths'
 
 export default {
   openapi: '3.0.0',
@@ -30,12 +34,14 @@ export default {
     { name: 'Login' }
   ],
   paths: {
-    '/login': loginPath
+    '/login': loginPath,
+    '/signup': signupPath
   },
   schemas: {
     account,
+    error,
     loginParams,
-    error
+    signUpParams
   },
   components: {
     securitySchemes: { apiKeyAuth },
