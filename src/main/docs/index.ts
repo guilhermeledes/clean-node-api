@@ -2,12 +2,14 @@ import {
   badRequest,
   notFound,
   serverError,
-  unauthorized
+  unauthorized,
+  forbidden
 } from './components'
 import {
   account,
   error,
-  loginParams
+  loginParams,
+  apiKeyAuth
 } from './schemas'
 import { loginPath } from './paths/login'
 
@@ -36,9 +38,11 @@ export default {
     error
   },
   components: {
+    securitySchemes: { apiKeyAuth },
     badRequest,
     serverError,
     unauthorized,
-    notFound
+    notFound,
+    forbidden
   }
 }
