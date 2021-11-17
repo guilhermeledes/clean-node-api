@@ -1,3 +1,6 @@
 export default [
-  { name: 'Login' }
+  {
+    name: 'Login',
+    description: 'APIs relacionadas a Login'
+  }
 ]
