@@ -1,21 +1,7 @@
-import {
-  badRequest,
-  notFound,
-  serverError,
-  unauthorized,
-  forbidden
-} from './components'
-import {
-  account,
-  error,
-  loginParams,
-  apiKeyAuth,
-  signUpParams
-} from './schemas'
-import {
-  loginPath,
-  signupPath
-} from './paths'
+import paths from './paths'
+import components from './components'
+import schemas from './schemas'
+import tags from './tags'
 
 export default {
   openapi: '3.0.0',
@@ -25,30 +11,16 @@ export default {
   },
   license: {
     name: 'GPL-3.0',
-    url: 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+    url: 'https://opensource.org/licenses/GPL-3.0'
   },
   servers: [
-    { url: '/api' }
+    {
+      url: '/api',
+      description: 'Servidor Principal'
+    }
   ],
-  tags: [
-    { name: 'Login' }
-  ],
-  paths: {
-    '/login': loginPath,
-    '/signup': signupPath
-  },
-  schemas: {
-    account,
-    error,
-    loginParams,
-    signUpParams
-  },
-  components: {
-    securitySchemes: { apiKeyAuth },
-    badRequest,
-    serverError,
-    unauthorized,
-    notFound,
-    forbidden
-  }
+  tags,
+  paths,
+  schemas,
+  components
 }
