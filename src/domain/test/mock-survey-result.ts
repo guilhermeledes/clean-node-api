@@ -3,10 +3,10 @@ import { SurveyResultModel } from '@/domain/models/survey-result'
 import { SurveyModel } from '@/domain/models/survey'
 import { AccountModel } from '@/domain/models/account'
 
-export const mockSaveSurveyResultParams = (survey?: SurveyModel, account?: AccountModel): SaveSurveyResultParams => ({
+export const mockSaveSurveyResultParams = (survey?: SurveyModel, account?: AccountModel, answerIndex: number = 0): SaveSurveyResultParams => ({
   surveyId: survey?.id || 'any_account_id',
   accountId: account?.id || 'any_survey_id',
-  answer: survey?.answers[0].answer || 'any_answer',
+  answer: survey?.answers[answerIndex].answer || 'any_answer',
   date: new Date()
 })
 

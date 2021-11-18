@@ -5,7 +5,8 @@ export const mockAddSurveyParams = (prefix: string = 'any'): AddSurveyParams => 
   question: `${prefix}_question`,
   answers: [
     mockSurveyAnswerModel(prefix),
-    mockSurveyAnswerModel(`other_${prefix}`)
+    mockSurveyAnswerModel(`other_${prefix}`),
+    mockSurveyAnswerModel(`any_other_${prefix}`)
   ],
   date: new Date()
 })
