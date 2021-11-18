@@ -11,7 +11,7 @@ let accountCollection: Collection
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   const res = await surveyCollection.insertOne(mockAddSurveyParams())
-  return { ...mockAddSurveyParams(), id: res.ops[0]._id }
+  return MongoHelper.map(res.ops[0])
 }
 
 describe('Survey Routes', () => {
@@ -56,6 +56,15 @@ describe('Survey Routes', () => {
       await request(app)
         .get('/api/surveys/any_id/results')
         .expect(403)
+    })
+
+    test('Should return 200 on load survey result with valid accessToken', async () => {
+      const survey = await makeSurvey()
+      const accessToken = await mockAccessToken(accountCollection)
+      await request(app)
+        .get(`/api/surveys/${survey.id}/results`)
+        .set({ 'x-access-token': accessToken })
+        .expect(200)
     })
   })
 })
