@@ -2,6 +2,8 @@ import { LoadSurveyResultRepository } from './db-load-survey-result-protocols'
 import { DbLoadSurveyResult } from './db-load-survey-reult'
 import { mockLoadSurveyResultRepository } from '@/data/test'
 import { mockSurveyResultModel } from '@/domain/test'
+import { MongoHelper } from '@/infra/db/mongodb/helpers'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   sut: DbLoadSurveyResult
@@ -18,6 +20,15 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbLoadSurveyResult Usecase', () => {
+  beforeAll(async () => {
+    await MongoHelper.connect(process.env.MONGO_URL)
+    MockDate.set(new Date())
+  })
+
+  afterAll(async () => {
+    await MongoHelper.disconnect()
+    MockDate.reset()
+  })
   test('Should call LoadSurveyResultRepository with correct value', async () => {
     const { sut,loadSurveyResultRepositoryStub } = makeSut()
     const loadSurveyByIdSpy = jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
