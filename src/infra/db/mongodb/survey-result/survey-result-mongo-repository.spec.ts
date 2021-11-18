@@ -80,4 +80,27 @@ describe('SurveyResultMongoRepository', () => {
       expect(surveyResult.answers[1].percent).toBe(0)
     })
   })
+
+  describe('loadBySurveyId()', () => {
+    test('Should load surveyResult on success', async () => {
+      const survey = await mockSurvey()
+      const account = await mockAccount()
+      await surveyResultCollection.insertMany([
+        mockSaveSurveyResultParams(survey, account),
+        mockSaveSurveyResultParams(survey, account),
+        mockSaveSurveyResultParams(survey, account, 1),
+        mockSaveSurveyResultParams(survey, account, 1)
+      ])
+      const sut = makeSut()
+      const surveyResult = await sut.loadBySurveyId(survey.id)
+      expect(surveyResult).toBeTruthy()
+      expect(surveyResult.surveyId).toEqual(survey.id)
+      expect(surveyResult.answers[0].count).toBe(2)
+      expect(surveyResult.answers[0].percent).toBe(50)
+      expect(surveyResult.answers[1].count).toBe(2)
+      expect(surveyResult.answers[1].percent).toBe(50)
+      expect(surveyResult.answers[2].count).toBe(0)
+      expect(surveyResult.answers[2].percent).toBe(0)
+    })
+  })
 })
