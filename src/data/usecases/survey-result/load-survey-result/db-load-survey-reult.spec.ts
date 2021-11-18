@@ -1,6 +1,6 @@
-import { LoadSurveyResultRepository } from './db-load-survey-result-protocols'
+import { LoadSurveyResultRepository,LoadSurveyByIdRepository } from './db-load-survey-result-protocols'
 import { DbLoadSurveyResult } from './db-load-survey-reult'
-import { mockLoadSurveyResultRepository } from '@/data/test'
+import { mockLoadSurveyByIdRepository, mockLoadSurveyResultRepository } from '@/data/test'
 import { mockSurveyResultModel } from '@/domain/test'
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 import MockDate from 'mockdate'
@@ -8,14 +8,17 @@ import MockDate from 'mockdate'
 type SutTypes = {
   sut: DbLoadSurveyResult
   loadSurveyResultRepositoryStub: LoadSurveyResultRepository
+  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository
 }
 
 const makeSut = (): SutTypes => {
   const loadSurveyResultRepositoryStub = mockLoadSurveyResultRepository()
-  const sut = new DbLoadSurveyResult(loadSurveyResultRepositoryStub)
+  const loadSurveyByIdRepositoryStub = mockLoadSurveyByIdRepository()
+  const sut = new DbLoadSurveyResult(loadSurveyResultRepositoryStub, loadSurveyByIdRepositoryStub)
   return {
     sut,
-    loadSurveyResultRepositoryStub
+    loadSurveyResultRepositoryStub,
+    loadSurveyByIdRepositoryStub
   }
 }
 
@@ -29,6 +32,7 @@ describe('DbLoadSurveyResult Usecase', () => {
     await MongoHelper.disconnect()
     MockDate.reset()
   })
+
   test('Should call LoadSurveyResultRepository with correct value', async () => {
     const { sut,loadSurveyResultRepositoryStub } = makeSut()
     const loadSurveyByIdSpy = jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
@@ -41,6 +45,14 @@ describe('DbLoadSurveyResult Usecase', () => {
     jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId').mockReturnValueOnce(Promise.reject(new Error()))
     const promise = sut.load('any_survey_id')
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should call LoadSurveyByIdRepository if LoadSurveyResultRepository returns null', async () => {
+    const { sut,loadSurveyResultRepositoryStub, loadSurveyByIdRepositoryStub } = makeSut()
+    jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId').mockReturnValueOnce(Promise.resolve(null))
+    const loadSurveyByIdSpy = jest.spyOn(loadSurveyByIdRepositoryStub,'loadById')
+    await sut.load('any_survey_id')
+    expect(loadSurveyByIdSpy).toBeCalledWith('any_survey_id')
   })
 
   test('Should return SurveyResultModel on success', async () => {
