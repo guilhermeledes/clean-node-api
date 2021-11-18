@@ -1,4 +1,4 @@
-import { SaveSurveyResultParams, SaveSurveyResultRepository, SurveyResultModel } from '@/data/usecases/save-survey-result/db-save-survey-result-protocols'
+import { SaveSurveyResultParams, SaveSurveyResultRepository, SurveyResultModel } from '@/data/usecases/survey-result/save-survey-result/db-save-survey-result-protocols'
 import { mockSurveyResultModel } from '@/domain/test'
 
 export const mockSaveSurveyResultRepository = (): SaveSurveyResultRepository => {
