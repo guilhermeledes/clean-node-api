@@ -3,6 +3,7 @@ import { EmailInUseError, MissingParamError, ServerError } from '@/presentation/
 import { SignUpController } from './signup-controller'
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helper/http/http-helper'
 import { mockAddAccount, mockAuthentication, mockValidation } from '@/presentation/test'
+import { mockAuthenticationModel } from '@/domain/test'
 
 type SutTypes = {
   sut: SignUpController
@@ -60,10 +61,10 @@ describe('SignUpController', () => {
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
   })
 
-  test('should return accessToken if valid data is provided', async () => {
+  test('should return authenticationModel if valid data is provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
+    expect(httpResponse).toEqual(ok(mockAuthenticationModel()))
   })
 
   test('should call Validation with correct value', async () => {
