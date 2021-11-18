@@ -3,7 +3,10 @@ import { SurveyAnswerModel, SurveyModel } from '@/domain/models/survey'
 
 export const mockAddSurveyParams = (prefix: string = 'any'): AddSurveyParams => ({
   question: `${prefix}_question`,
-  answers: [mockSurveyAnswerModel(prefix)],
+  answers: [
+    mockSurveyAnswerModel(prefix),
+    mockSurveyAnswerModel(`other_${prefix}`)
+  ],
   date: new Date()
 })
 
