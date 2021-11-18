@@ -3,6 +3,7 @@ import { MissingParamError } from '@/presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@/presentation/helper/http/http-helper'
 import { LoginController } from './login-controller'
 import { mockAuthentication, mockValidation } from '@/presentation/test'
+import { mockAuthenticationModel } from '@/domain/test'
 
 type SutTypes = {
   sut: LoginController
@@ -65,7 +66,7 @@ describe('Login Controller', () => {
   test('should return 200 if valid credentials are provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
+    expect(httpResponse).toEqual(ok(mockAuthenticationModel()))
   })
 
   test('should return 500 if authentication throws', async () => {
