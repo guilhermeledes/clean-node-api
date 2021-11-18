@@ -22,7 +22,7 @@ export const mockSurveyModel = (prefix: string = 'any'): SurveyModel => (
     question: `${prefix}_question`,
     answers: [
       mockSurveyAnswerModel(prefix),
-      mockSurveyAnswerModel(`${prefix}_other`)
+      mockSurveyAnswerModel('other')
     ],
     date: new Date()
   })
