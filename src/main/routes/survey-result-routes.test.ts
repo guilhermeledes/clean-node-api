@@ -45,7 +45,7 @@ describe('Survey Routes', () => {
         .put(`/api/surveys/${survey.id}/results`)
         .set({ 'x-access-token': accessToken })
         .send({
-          answer: 'any_answer'
+          answer: survey.answers[0].answer
         })
         .expect(200)
     })

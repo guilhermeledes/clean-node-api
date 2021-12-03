@@ -4,6 +4,7 @@ import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import { mockAddSurveyParams } from '@/domain/test'
 import { mockAccessToken } from '../test'
+import faker from 'faker'
 
 let surveyCollection: Collection
 let accountCollection: Collection
@@ -29,10 +30,10 @@ describe('Survey Routes', () => {
       await request(app)
         .post('/api/surveys')
         .send({
-          question: 'any_question',
+          question: faker.lorem.words(),
           answers: [
-            { answer: 'any_answer', image: 'http://image-name.com' },
-            { answer: 'other_answer' }
+            { answer: faker.random.word(), image: faker.image.imageUrl() },
+            { answer: faker.random.word() }
           ]
         })
         .expect(403)
@@ -44,10 +45,10 @@ describe('Survey Routes', () => {
         .post('/api/surveys')
         .set({ 'x-access-token': accessToken })
         .send({
-          question: 'any_question',
+          question: faker.lorem.words(),
           answers: [
-            { answer: 'any_answer', image: 'http://image-name.com' },
-            { answer: 'other_answer' }
+            { answer: faker.random.word(), image: faker.image.imageUrl() },
+            { answer: faker.random.word() }
           ]
         })
         .expect(204)
@@ -63,7 +64,7 @@ describe('Survey Routes', () => {
 
     test('Should return 200 on load surveys with accessToken', async () => {
       const accessToken = await mockAccessToken(accountCollection, 'admin')
-      await surveyCollection.insertMany([mockAddSurveyParams(), mockAddSurveyParams('other')])
+      await surveyCollection.insertMany([mockAddSurveyParams(), mockAddSurveyParams()])
       await request(app)
         .get('/api/surveys')
         .set({ 'x-access-token': accessToken })

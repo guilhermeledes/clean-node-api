@@ -2,7 +2,7 @@ import { Collection } from 'mongodb'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import MockDate from 'mockdate'
-import { mockAddAccountParams, mockAddSurveyParams, mockSaveSurveyResultParams } from '@/domain/test'
+import { mockAddAccountParams, mockAddSurveyParams } from '@/domain/test'
 import { AccountModel } from '@/domain/models/account'
 import { SurveyModel } from '@/domain/models/survey'
 
@@ -19,12 +19,10 @@ const mockAccount = async (): Promise<AccountModel> => {
   return MongoHelper.map(res.ops[0])
 }
 
-const mockSurvey = async (prefix: string = 'any'): Promise<SurveyModel> => {
-  const res = await surveyCollection.insertOne(mockAddSurveyParams(prefix))
-  const survey = await surveyCollection.findOne({ _id: res.ops[0]._id })
-  return MongoHelper.map(survey)
+const mockSurvey = async (): Promise<SurveyModel> => {
+  const res = await surveyCollection.insertOne(mockAddSurveyParams())
+  return MongoHelper.map(res.ops[0])
 }
-
 describe('SurveyMongoRepository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
@@ -48,25 +46,29 @@ describe('SurveyMongoRepository', () => {
   describe('add()', () => {
     test('Should add a survey on success', async () => {
       const sut = makeSut()
-      await sut.add(mockAddSurveyParams())
-      const survey = await surveyCollection.findOne({ question: 'any_question' })
+      const addSurveyParams = mockAddSurveyParams()
+      await sut.add(addSurveyParams)
+      const survey = await surveyCollection.findOne({ question: addSurveyParams.question })
       expect(survey).toBeTruthy()
     })
   })
   describe('loadAll()', () => {
     test('Should load all surveys on success', async () => {
-      const survey = await mockSurvey()
-      await mockSurvey('other')
+      const addSurveyModels = [mockAddSurveyParams(), mockAddSurveyParams()]
+      await surveyCollection.insertMany(addSurveyModels)
+      const surveyModels: SurveyModel[] = MongoHelper.mapCollection(await surveyCollection.find().toArray())
+
       const account = await mockAccount()
-      await surveyResultCollection.insertOne(mockSaveSurveyResultParams(survey, account))
+      await surveyResultCollection.insertOne({ accountId: account.id, surveyId: surveyModels[0].id, answer: surveyModels[0].answers[0].answer, date: new Date() })
+
       const sut = makeSut()
       const surveys = await sut.loadAll(account.id)
       expect(surveys.length).toBe(2)
-      expect(surveys[0].id).toBeTruthy()
-      expect(surveys[0].question).toEqual('any_question')
+      expect(surveys[0].id).toEqual(surveyModels[0].id)
+      expect(surveys[0].question).toBe(surveyModels[0].question)
       expect(surveys[0].didAnswer).toBe(true)
-      expect(surveys[1].id).toBeTruthy()
-      expect(surveys[1].question).toEqual('other_question')
+      expect(surveys[1].id).toEqual(surveyModels[1].id)
+      expect(surveys[1].question).toBe(surveyModels[1].question)
       expect(surveys[1].didAnswer).toBe(false)
     })
 
@@ -79,13 +81,10 @@ describe('SurveyMongoRepository', () => {
   })
   describe('loadById()', () => {
     test('Should load survey by id on success', async () => {
-      const res = await surveyCollection.insertOne(mockAddSurveyParams())
-      const id = res.ops[0]._id
-      const fakeSurvey = { ...mockAddSurveyParams(), id }
+      const surveyModel = await mockSurvey()
       const sut = makeSut()
-      const survey = await sut.loadById(id)
-      expect(survey.id).toEqual(id)
-      expect(survey).toEqual(fakeSurvey)
+      const survey = await sut.loadById(surveyModel.id)
+      expect(survey).toEqual(surveyModel)
     })
   })
 })

@@ -1,28 +1,27 @@
 import { SaveSurveyResultParams } from '@/domain/usecases/survey-result/save-survey-result'
 import { SurveyResultModel } from '@/domain/models/survey-result'
-import { SurveyModel } from '@/domain/models/survey'
-import { AccountModel } from '@/domain/models/account'
+import faker from 'faker'
 
-export const mockSaveSurveyResultParams = (survey?: SurveyModel, account?: AccountModel, answerIndex: number = 0): SaveSurveyResultParams => ({
-  surveyId: survey?.id || 'any_account_id',
-  accountId: account?.id || 'any_survey_id',
-  answer: survey?.answers[answerIndex].answer || 'any_answer',
-  date: new Date()
+export const mockSaveSurveyResultParams = (): SaveSurveyResultParams => ({
+  surveyId: faker.datatype.uuid(),
+  accountId: faker.datatype.uuid(),
+  answer: faker.random.word(),
+  date: faker.date.recent()
 })
 
 export const mockSurveyResultModel = (): SurveyResultModel => ({
-  surveyId: 'any_id',
+  surveyId: faker.datatype.uuid(),
+  question: faker.random.words(),
   answers: [{
-    image: 'any_image',
-    answer: 'any_answer',
-    count: 0,
-    percent: 0
+    image: faker.image.imageUrl(),
+    answer: faker.random.word(),
+    count: faker.datatype.number({ min: 0, max: 1000 }),
+    percent: faker.datatype.number({ min: 0, max: 100, precision: 2 })
   },{
-    answer: 'other_answer',
-    image: 'other_image',
-    count: 0,
-    percent: 0
+    image: faker.image.imageUrl(),
+    answer: faker.random.word(),
+    count: faker.datatype.number({ min: 0, max: 1000 }),
+    percent: faker.datatype.number({ min: 0, max: 100, precision: 2 })
   }],
-  date: new Date(),
-  question: 'any_question'
+  date: faker.date.recent()
 })
