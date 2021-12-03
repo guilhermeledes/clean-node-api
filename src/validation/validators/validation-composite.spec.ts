@@ -1,5 +1,5 @@
 import { Validation } from '@/presentation/protocols'
-import { mockValidation } from '@/validation/test'
+import { ValidationSpy } from '@/validation/test'
 import { ValidationComposite } from './validation-composite'
 
 type SutTypes = {
@@ -9,8 +9,8 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const validationStubs = [
-    mockValidation(),
-    mockValidation()
+    new ValidationSpy(),
+    new ValidationSpy()
   ]
   const sut = new ValidationComposite(validationStubs)
   return {
