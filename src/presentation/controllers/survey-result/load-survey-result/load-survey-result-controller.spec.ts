@@ -24,6 +24,7 @@ const makeSut = (): SutTypes => {
 }
 
 const mockRequest = (): HttpRequest => ({
+  accountId: faker.datatype.uuid(),
   params: {
     surveyId: faker.datatype.uuid()
   }
@@ -64,6 +65,7 @@ describe('LoadSurveyResultController', () => {
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(loadSurveyresultSpy.surveyId).toBe(httpRequest.params.surveyId)
+    expect(loadSurveyresultSpy.accountId).toBe(httpRequest.accountId)
   })
 
   test('Should return 200 with correct data on success', async () => {
