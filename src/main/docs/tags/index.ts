@@ -7,5 +7,4 @@ export default [
     name: 'Enquete',
     description: 'APIs relacionadas a Enquete'
   }
-
 ]

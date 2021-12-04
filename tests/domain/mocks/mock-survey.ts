@@ -1,5 +1,5 @@
-import { AddSurveyParams } from '@/data/usecases/survey/add-survey/db-add-survey-protocols'
-import { SurveyAnswerModel, SurveyModel } from '@/domain/models/survey'
+import { SurveyAnswerModel, SurveyModel } from '@/domain/models'
+import { AddSurveyParams } from '@/domain/usecases'
 import faker from 'faker'
 
 export const mockAddSurveyParams = (): AddSurveyParams => ({

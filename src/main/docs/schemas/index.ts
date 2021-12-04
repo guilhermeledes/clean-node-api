@@ -10,7 +10,6 @@ import { addSurveyParams } from './add-survey-params'
 import { surveyResult } from './survey-result'
 import { surveyResultAnswer } from './survey-result-answer'
 import { saveSurveyParams } from './save-survey-params'
-
 export default {
   error,
   apiKeyAuth,
