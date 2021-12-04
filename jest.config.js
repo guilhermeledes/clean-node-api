@@ -1,14 +1,13 @@
 /* eslint-disable eol-last */
 /* eslint-disable indent */
-const { pathsToModuleNameMapper } = require('ts-jest/utils')
-const { compilerOptions } = require('./tsconfig.json')
 
 module.exports = {
-    roots: ['<rootDir>/src'],
-    testMatch: ['**/?(*.)+(spec|test).[t]s'],
-    testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+    roots: ['<rootDir>/tests'],
     coverageDirectory: 'coverage',
-    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src' }),
+    moduleNameMapper: {
+        '@/tests/(.*)': '<rootDir>/tests/$1',
+        '@/(.*)': '<rootDir>/src/$1'
+    },
     coveragePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/', 'protocols', 'test'],
     coverageReporters: ['text-summary', 'lcov'],
     preset: '@shelf/jest-mongodb',

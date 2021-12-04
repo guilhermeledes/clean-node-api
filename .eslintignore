@@ -1,6 +1,8 @@
 node_modules
 dist
 coverage
-./data
+data
+!src/data
+!tests/data
 .vscode
 .husky

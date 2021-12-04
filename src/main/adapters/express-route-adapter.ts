@@ -1,5 +1,5 @@
 import { Controller, HttpRequest } from '@/presentation/protocols'
-import { Request, Response, RequestHandler } from 'express'
+import { Request, RequestHandler, Response } from 'express'
 
 type Adapter = (controller: Controller) => RequestHandler
 
