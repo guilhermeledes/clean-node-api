@@ -31,6 +31,21 @@ describe('AccountMongoRepository', () => {
       expect(isValid).toBe(true)
     })
   })
+  describe('checkByEmail()', () => {
+    test('Should return true if email exists', async () => {
+      const sut = makeSut()
+      const params = mockAddAccountParams()
+      await accountCollection.insertOne(params)
+      const exists = await sut.checkByEmail(params.email)
+      expect(exists).toBe(true)
+    })
+
+    test('Should return false if email not exists', async () => {
+      const sut = makeSut()
+      const exists = await sut.checkByEmail(faker.internet.email())
+      expect(exists).toBe(false)
+    })
+  })
   describe('loadByEmail()', () => {
     test('Should return an account on loadByEmail success', async () => {
       const sut = makeSut()
