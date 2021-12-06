@@ -5,16 +5,15 @@ import {
   UpdateAccessTokenRepository
 } from '@/data/protocols';
 import { AccountModel } from '@/domain/models';
-import { AddAccountParams } from '@/domain/usecases';
 import { mockAccountModel } from '@/tests/domain/mocks';
 
 export class AddAccountRepositorySpy implements AddAccountRepository {
-  accountModel = mockAccountModel()
-  addAccountParams: AddAccountParams
+  result = mockAccountModel()
+  params: AddAccountRepository.Params
 
-  async add (data: AddAccountParams): Promise<AccountModel> {
-    this.addAccountParams = data
-    return await Promise.resolve(this.accountModel)
+  async add (data: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
+    this.params = data
+    return await Promise.resolve(this.result)
   }
 }
 
@@ -29,14 +28,14 @@ export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailReposi
 }
 
 export class LoadAccountByTokenRepositorySpy implements LoadAccountByTokenRepository {
-  accountModel = mockAccountModel()
+  result = mockAccountModel()
   token: string
   role: string
 
-  async loadByToken (token: string, role?: string): Promise<AccountModel> {
+  async loadByToken (token: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
     this.token = token
     this.role = role
-    return await Promise.resolve(this.accountModel)
+    return await Promise.resolve(this.result)
   }
 }
 
