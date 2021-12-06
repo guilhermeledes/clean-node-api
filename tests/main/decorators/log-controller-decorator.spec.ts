@@ -2,7 +2,6 @@ import { LogControllerDecorator } from '@/main/decorators'
 import { ok, serverError } from '@/presentation/helper'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 import { LogErrorRepositorySpy } from '@/tests/data/mocks'
-import { mockAccountModel } from '@/tests/domain/mocks'
 import faker from 'faker'
 
 type SutTypes = {
@@ -20,7 +19,7 @@ const makeSut = (): SutTypes => {
 
 class ControllerSpy implements Controller {
   request: any
-  httpResponse: HttpResponse = ok(mockAccountModel())
+  httpResponse: HttpResponse = ok(faker.random.word())
 
   async handle (request: any): Promise<HttpResponse> {
     this.request = request

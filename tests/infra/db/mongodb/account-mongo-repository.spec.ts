@@ -24,15 +24,11 @@ describe('AccountMongoRepository', () => {
   })
 
   describe('add()', () => {
-    test('Should return an account on add success', async () => {
+    test('Should return an true on add success', async () => {
       const sut = makeSut()
       const params = mockAddAccountParams()
-      const account = await sut.add(params)
-      expect(account).toBeTruthy()
-      expect(account.id).toBeTruthy()
-      expect(account.name).toBe(params.name)
-      expect(account.email).toBe(params.email)
-      expect(account.password).toBe(params.password)
+      const isValid = await sut.add(params)
+      expect(isValid).toBe(true)
     })
   })
   describe('loadByEmail()', () => {
@@ -44,7 +40,6 @@ describe('AccountMongoRepository', () => {
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe(params.name)
-      expect(account.email).toBe(params.email)
       expect(account.password).toBe(params.password)
     })
 
