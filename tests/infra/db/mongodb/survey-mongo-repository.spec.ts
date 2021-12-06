@@ -1,4 +1,3 @@
-import { AccountModel } from '@/domain/models/account'
 import { SurveyModel } from '@/domain/models/survey'
 import { MongoHelper, SurveyMongoRepository } from '@/infra/db'
 import { mockAddAccountParams, mockAddSurveyParams } from '@/tests/domain/mocks'
@@ -13,9 +12,9 @@ const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository()
 }
 
-const mockAccount = async (): Promise<AccountModel> => {
+const mockAccountId = async (): Promise<string> => {
   const res = await accountCollection.insertOne(mockAddAccountParams())
-  return MongoHelper.map(res.ops[0])
+  return res.ops[0]._id
 }
 
 const mockSurvey = async (): Promise<SurveyModel> => {
@@ -57,11 +56,11 @@ describe('SurveyMongoRepository', () => {
       await surveyCollection.insertMany(addSurveyModels)
       const surveyModels: SurveyModel[] = MongoHelper.mapCollection(await surveyCollection.find().toArray())
 
-      const account = await mockAccount()
-      await surveyResultCollection.insertOne({ accountId: account.id, surveyId: surveyModels[0].id, answer: surveyModels[0].answers[0].answer, date: new Date() })
+      const accountId = await mockAccountId()
+      await surveyResultCollection.insertOne({ accountId, surveyId: surveyModels[0].id, answer: surveyModels[0].answers[0].answer, date: new Date() })
 
       const sut = makeSut()
-      const surveys = await sut.loadAll(account.id)
+      const surveys = await sut.loadAll(accountId)
       expect(surveys.length).toBe(2)
       expect(surveys[0].id).toEqual(surveyModels[0].id)
       expect(surveys[0].question).toBe(surveyModels[0].question)
@@ -72,9 +71,9 @@ describe('SurveyMongoRepository', () => {
     })
 
     test('Should return an empty list if there are no surveys', async () => {
-      const account = await mockAccount()
+      const accountId = await mockAccountId()
       const sut = makeSut()
-      const surveys = await sut.loadAll(account.id)
+      const surveys = await sut.loadAll(accountId)
       expect(surveys.length).toBe(0)
     })
   })

@@ -1,7 +1,6 @@
 import { SaveSurveyResultController } from '@/presentation/controllers'
 import { InvalidParamError } from '@/presentation/errors'
 import { forbidden, ok, serverError } from '@/presentation/helper'
-import { HttpRequest } from '@/presentation/protocols'
 import { LoadSurveyByIdSpy, SaveSurveyResultSpy } from '@/tests/presentation/mocks'
 import faker from 'faker'
 import MockDate from 'mockdate'
@@ -24,13 +23,9 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const mockRequest = (answer?: string): HttpRequest => ({
-  params: {
-    surveyId: faker.datatype.uuid()
-  },
-  body: {
-    answer
-  },
+const mockRequest = (answer?: string): SaveSurveyResultController.Request => ({
+  surveyId: faker.datatype.uuid(),
+  answer,
   accountId: faker.datatype.uuid()
 })
 
@@ -45,9 +40,9 @@ describe('SaveSurveyResultController', () => {
 
   test('Should call LoadSurveyById with correct values', async () => {
     const { sut, loadSurveyByIdSpy } = makeSut()
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(loadSurveyByIdSpy.surveyId).toBe(httpRequest.params.surveyId)
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(loadSurveyByIdSpy.surveyId).toBe(request.surveyId)
   })
 
   test('Should return 403 if LoadSurveyById returns null', async () => {
@@ -66,9 +61,9 @@ describe('SaveSurveyResultController', () => {
 
   test('Should return 403 if invalid answer is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest = mockRequest()
-    httpRequest.body.answer = 'invalid_answer'
-    const httpResponse = await sut.handle(httpRequest)
+    const request = mockRequest()
+    request.answer = 'invalid_answer'
+    const httpResponse = await sut.handle(request)
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('answer')))
   })
 
@@ -77,9 +72,9 @@ describe('SaveSurveyResultController', () => {
     const httpeRequest = mockRequest(loadSurveyByIdSpy.surveyModel.answers[0].answer)
     await sut.handle(httpeRequest)
     expect(saveSurveyResultSpy.data).toEqual({
-      surveyId: httpeRequest.params.surveyId,
+      surveyId: httpeRequest.surveyId,
       accountId: httpeRequest.accountId,
-      answer: httpeRequest.body.answer,
+      answer: httpeRequest.answer,
       date: new Date()
     })
   })
