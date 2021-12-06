@@ -85,6 +85,24 @@ describe('SurveyMongoRepository', () => {
       const survey = await sut.loadById(surveyData.id)
       expect(survey).toEqual(surveyData)
     })
+    test('Should return null if survey not exists', async () => {
+      const sut = makeSut()
+      const survey = await sut.loadById(new FakeObjectId().toHexString())
+      expect(survey).toBeFalsy()
+    })
+  })
+  describe('loadAnswers()', () => {
+    test('Should load answers on success', async () => {
+      const surveyData = await makeSurvey()
+      const sut = makeSut()
+      const answers = await sut.loadAnswers(surveyData.id)
+      expect(answers).toEqual(surveyData.answers.map(answer => answer.answer))
+    })
+    test('Should return empty array if survey does not exists', async () => {
+      const sut = makeSut()
+      const answers = await sut.loadAnswers(new FakeObjectId().toHexString())
+      expect(answers).toEqual([])
+    })
   })
   describe('checkById()', () => {
     test('Should return true if survey exists', async () => {
@@ -93,7 +111,6 @@ describe('SurveyMongoRepository', () => {
       const exists = await sut.checkById(surveyData.id)
       expect(exists).toEqual(true)
     })
-
     test('Should return false if survey not exists', async () => {
       const sut = makeSut()
       const exists = await sut.checkById(new FakeObjectId().toHexString())
