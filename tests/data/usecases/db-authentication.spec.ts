@@ -34,9 +34,9 @@ describe('DbAuthentication UseCase', () => {
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut()
     const loadSpy = jest.spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail')
-    const authenticationParams = mockAuthenticationParams()
-    await sut.auth(authenticationParams)
-    expect(loadSpy).toHaveBeenCalledWith(authenticationParams.email)
+    const params = mockAuthenticationParams()
+    await sut.auth(params)
+    expect(loadSpy).toHaveBeenCalledWith(params.email)
   })
 
   test('Should throw if LoadAccountByEmailRepository throws', async () => {
@@ -55,9 +55,9 @@ describe('DbAuthentication UseCase', () => {
 
   test('Should call HashComparer with correct values', async () => {
     const { sut, hashComparerSpy, loadAccountByEmailRepositorySpy } = makeSut()
-    const authenticationParams = mockAuthenticationParams()
-    await sut.auth(authenticationParams)
-    expect(hashComparerSpy.plaintext).toBe(authenticationParams.password)
+    const params = mockAuthenticationParams()
+    await sut.auth(params)
+    expect(hashComparerSpy.plaintext).toBe(params.password)
     expect(hashComparerSpy.digest).toBe(loadAccountByEmailRepositorySpy.accountModel.password)
   })
 
