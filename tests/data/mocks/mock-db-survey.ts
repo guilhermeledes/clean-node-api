@@ -1,32 +1,39 @@
-import { AddSurveyRepository, LoadSurveyByIdRepository, LoadSurveysRepository } from '@/data/protocols'
-import { SurveyModel } from '@/domain/models'
-import { AddSurveyParams } from '@/domain/usecases'
-import { mockSurveyModel, mockSurveyModels } from '@/tests/domain/mocks'
+import { AddSurveyRepository, CheckSurveyByIdRepository, LoadSurveyByIdRepository, LoadSurveysRepository } from '@/data/protocols';
+import { mockSurveyModel, mockSurveyModels } from '@/tests/domain/mocks';
 
 export class AddSurveyRepositorySpy implements AddSurveyRepository {
-  addSurveyParams: AddSurveyParams
+  params: AddSurveyRepository.Params
 
-  async add (data: AddSurveyParams): Promise<void> {
-    this.addSurveyParams = data
+  async add (data: AddSurveyRepository.Params): Promise<void> {
+    this.params = data
     return await Promise.resolve()
   }
 }
 export class LoadSurveyByIdRepositorySpy implements LoadSurveyByIdRepository {
   surveyId: string
-  surveyModel: SurveyModel = mockSurveyModel()
+  result: LoadSurveyByIdRepository.Result = mockSurveyModel()
 
-  async loadById (surveyId: string): Promise<SurveyModel> {
+  async loadById (surveyId: string): Promise<LoadSurveyByIdRepository.Result> {
     this.surveyId = surveyId
-    return await Promise.resolve(this.surveyModel)
+    return await Promise.resolve(this.result)
+  }
+}
+export class CheckSurveyByIdRepositorySpy implements CheckSurveyByIdRepository {
+  surveyId: string
+  result: CheckSurveyByIdRepository.Result = true
+
+  async checkById (surveyId: string): Promise<CheckSurveyByIdRepository.Result> {
+    this.surveyId = surveyId
+    return await Promise.resolve(this.result)
   }
 }
 
 export class LoadSurveysRepositorySpy implements LoadSurveysRepository {
-  surveyModels: SurveyModel[] = mockSurveyModels()
+  result: LoadSurveysRepository.Result = mockSurveyModels()
   accountId: string
 
-  async loadAll (accountId: string): Promise<SurveyModel[]> {
+  async loadAll (accountId: string): Promise<LoadSurveysRepository.Result> {
     this.accountId = accountId
-    return await Promise.resolve(this.surveyModels)
+    return await Promise.resolve(this.result)
   }
 }

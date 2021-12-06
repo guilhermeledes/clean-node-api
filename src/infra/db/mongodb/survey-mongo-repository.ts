@@ -1,18 +1,17 @@
+import { CheckSurveyByIdRepository } from '@/data/protocols'
 import { AddSurveyRepository } from '@/data/protocols/db/survey/add-survey-repository'
 import { LoadSurveyByIdRepository } from '@/data/protocols/db/survey/load-survey-by-id-repository'
 import { LoadSurveysRepository } from '@/data/protocols/db/survey/load-surveys-repository'
-import { SurveyModel } from '@/domain/models/survey'
-import { AddSurveyParams } from '@/domain/usecases'
 import { MongoHelper, QueryBuilder } from '@/infra/db'
 import { ObjectId } from 'mongodb'
 
-export class SurveyMongoRepository implements AddSurveyRepository, LoadSurveysRepository, LoadSurveyByIdRepository {
-  async add (surveyData: AddSurveyParams): Promise<void> {
+export class SurveyMongoRepository implements AddSurveyRepository, LoadSurveysRepository, LoadSurveyByIdRepository, CheckSurveyByIdRepository {
+  async add (surveyData: AddSurveyRepository.Params): Promise<void> {
     const surveyCollection = MongoHelper.getCollection('surveys')
     await surveyCollection.insertOne(surveyData)
   }
 
-  async loadAll (accountId: string): Promise<SurveyModel[]> {
+  async loadAll (accountId: string): Promise<LoadSurveysRepository.Result> {
     const surveyCollection = MongoHelper.getCollection('surveys')
 
     const query = new QueryBuilder()
@@ -47,9 +46,21 @@ export class SurveyMongoRepository implements AddSurveyRepository, LoadSurveysRe
     return MongoHelper.mapCollection(surveys)
   }
 
-  async loadById (id: string): Promise<SurveyModel> {
+  async loadById (surveyId: string): Promise<LoadSurveyByIdRepository.Result> {
     const surveyCollection = MongoHelper.getCollection('surveys')
-    const survey = await surveyCollection.findOne({ _id: new ObjectId(id) })
+    const survey = await surveyCollection.findOne({ _id: new ObjectId(surveyId) })
     return survey && MongoHelper.map(survey)
+  }
+
+  async checkById (surveyId: string): Promise<CheckSurveyByIdRepository.Result> {
+    const surveyCollection = MongoHelper.getCollection('surveys')
+    const survey = await surveyCollection.findOne({
+      _id: new ObjectId(surveyId)
+    },{
+      projection: {
+        _id: 1
+      }
+    })
+    return survey !== null
   }
 }

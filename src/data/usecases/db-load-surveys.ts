@@ -1,5 +1,4 @@
 import { LoadSurveysRepository } from '@/data/protocols';
-import { SurveyModel } from '@/domain/models';
 import { LoadSurveys } from '@/domain/usecases';
 
 export class DbLoadSurveys implements LoadSurveys {
@@ -7,7 +6,7 @@ export class DbLoadSurveys implements LoadSurveys {
     private readonly loadSurveysRepository: LoadSurveysRepository
   ) {}
 
-  async load (accountId: string): Promise<SurveyModel[]> {
+  async load (accountId: string): Promise<LoadSurveys.Result> {
     return await this.loadSurveysRepository.loadAll(accountId)
   }
 }

@@ -1,5 +1,5 @@
 import { SurveyModel } from '@/domain/models'
-import { SaveSurveyResultParams } from '@/domain/usecases'
+import { SaveSurveyResult } from '@/domain/usecases'
 import { MongoHelper, SurveyResultMongoRepository } from '@/infra/db'
 import { mockAddAccountParams, mockAddSurveyParams } from '@/tests/domain/mocks'
 import MockDate from 'mockdate'
@@ -24,7 +24,7 @@ const makeAccountId = async (): Promise<string> => {
   return res.ops[0]._id
 }
 
-const mockSaveSurveyResultParams = (survey: SurveyModel, accountId: string, answerIndex: number = 0): SaveSurveyResultParams => ({
+const mockSaveSurveyResultParams = (survey: SurveyModel, accountId: string, answerIndex: number = 0): SaveSurveyResult.Params => ({
   surveyId: survey.id,
   accountId,
   answer: survey.answers[answerIndex].answer,

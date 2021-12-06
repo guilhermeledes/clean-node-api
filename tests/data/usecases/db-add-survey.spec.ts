@@ -29,7 +29,7 @@ describe('DbAddSurvey Usecase', () => {
     const { sut, addSuveyRepositorySpy } = makeSut()
     const surveyData = mockAddSurveyParams()
     await sut.add(surveyData)
-    expect(addSuveyRepositorySpy.addSurveyParams).toBe(surveyData)
+    expect(addSuveyRepositorySpy.params).toBe(surveyData)
   })
 
   test('Should throw if AddSurveyRepository throws', async () => {
