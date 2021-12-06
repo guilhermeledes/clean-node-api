@@ -1,7 +1,7 @@
 import { AccessDeniedError } from '@/presentation/errors'
 import { forbidden, ok, serverError } from '@/presentation/helper'
 import { AuthMiddleware } from '@/presentation/middlewares'
-import { HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { HttpResponse } from '@/presentation/protocols'
 import { LoadAccountByTokenSpy } from '@/tests/presentation/mocks'
 import faker from 'faker'
 
@@ -19,10 +19,8 @@ const makeSut = (role?: string): SutTypes => {
   }
 }
 
-const mockRequest = (): HttpRequest => ({
-  headers: {
-    'x-access-token': faker.internet.password()
-  }
+const mockRequest = (): AuthMiddleware.Request => ({
+  accessToken: faker.internet.password()
 })
 
 describe('AuthMiddleware', () => {
@@ -37,13 +35,13 @@ describe('AuthMiddleware', () => {
     const { sut, loadAccountByTokenSpy } = makeSut(role)
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(loadAccountByTokenSpy.accessToken).toBe(httpRequest.headers['x-access-token'])
+    expect(loadAccountByTokenSpy.accessToken).toBe(httpRequest.accessToken)
     expect(loadAccountByTokenSpy.role).toBe(role)
   })
 
   test('Should return 403 if LoadAccountByToken returns null', async () => {
     const { sut, loadAccountByTokenSpy } = makeSut()
-    jest.spyOn(loadAccountByTokenSpy, 'load').mockReturnValueOnce(Promise.resolve(null))
+    loadAccountByTokenSpy.result = null
     const httpRequest = mockRequest()
     const httpResponse: HttpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
@@ -53,7 +51,7 @@ describe('AuthMiddleware', () => {
     const { sut, loadAccountByTokenSpy } = makeSut()
     const httpRequest = mockRequest()
     const httpResponse: HttpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(ok({ accountId: loadAccountByTokenSpy.accountModel.id }))
+    expect(httpResponse).toEqual(ok({ accountId: loadAccountByTokenSpy.result.id }))
   })
 
   test('Should return 500 if LoadAccountByToken throws', async () => {

@@ -1,9 +1,8 @@
 import { LoginController } from '@/presentation/controllers'
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@/presentation/helper'
-import { HttpRequest } from '@/presentation/protocols'
-import { mockAuthenticationParams } from '@/tests/domain/mocks'
 import { AuthenticationSpy, ValidationSpy } from '@/tests/presentation/mocks'
+import faker from 'faker'
 
 type SutTypes = {
   sut: LoginController
@@ -22,17 +21,17 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const mockRequest = (): HttpRequest => (
-  {
-    body: mockAuthenticationParams()
-  })
+const mockRequest = (): LoginController.Request => ({
+  email: faker.internet.email(),
+  password: faker.internet.password()
+})
 
 describe('Login Controller', () => {
   test('should call Validation with correct value', async () => {
     const { sut, validationSpy } = makeSut()
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(validationSpy.input).toBe(httpRequest.body)
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(validationSpy.input).toBe(request)
   })
 
   test('should return 400 if Validation returns an error', async () => {
@@ -44,11 +43,11 @@ describe('Login Controller', () => {
 
   test('should call Authentication with correct values', async () => {
     const { sut, authenticationSpy } = makeSut()
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(authenticationSpy.authenticationParams).toEqual({
-      email: httpRequest.body.email,
-      password: httpRequest.body.password
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(authenticationSpy.params).toEqual({
+      email: request.email,
+      password: request.password
     })
   })
 
@@ -61,9 +60,9 @@ describe('Login Controller', () => {
 
   test('should return 200 if valid credentials are provided', async () => {
     const { sut, authenticationSpy } = makeSut()
-    const httpRequest = mockRequest()
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(ok(authenticationSpy.authenticationModel))
+    const request = mockRequest()
+    const httpResponse = await sut.handle(request)
+    expect(httpResponse).toEqual(ok(authenticationSpy.result))
   })
 
   test('should return 500 if authentication throws', async () => {

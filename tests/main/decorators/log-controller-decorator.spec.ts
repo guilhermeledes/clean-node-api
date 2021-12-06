@@ -1,8 +1,7 @@
 import { LogControllerDecorator } from '@/main/decorators'
 import { ok, serverError } from '@/presentation/helper'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { Controller, HttpResponse } from '@/presentation/protocols'
 import { LogErrorRepositorySpy } from '@/tests/data/mocks'
-import { mockAccountModel } from '@/tests/domain/mocks'
 import faker from 'faker'
 
 type SutTypes = {
@@ -19,24 +18,12 @@ const makeSut = (): SutTypes => {
 }
 
 class ControllerSpy implements Controller {
-  httpRequest: HttpRequest
-  httpResponse: HttpResponse = ok(mockAccountModel())
+  request: any
+  httpResponse: HttpResponse = ok(faker.random.word())
 
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    this.httpRequest = httpRequest
+  async handle (request: any): Promise<HttpResponse> {
+    this.request = request
     return await Promise.resolve(this.httpResponse)
-  }
-}
-
-const mockRequest = (): HttpRequest => {
-  const password = faker.internet.password()
-  return {
-    body: {
-      name: faker.name.findName(),
-      email: faker.internet.email(),
-      password,
-      passwordConfirmation: password
-    }
   }
 }
 
@@ -49,14 +36,14 @@ const mockServerError = (): HttpResponse => {
 describe('LogController Decorator', () => {
   test('Should call controller handle', async () => {
     const { sut, controllerSpy } = makeSut()
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(controllerSpy.httpRequest).toBe(httpRequest)
+    const request = faker.lorem.sentence()
+    await sut.handle(request)
+    expect(controllerSpy.request).toBe(request)
   })
 
   test('Should return the same result of the crontroler', async () => {
     const { sut, controllerSpy } = makeSut()
-    const httpResponse = await sut.handle(mockRequest())
+    const httpResponse = await sut.handle(faker.lorem.sentence())
     expect(httpResponse).toEqual(controllerSpy.httpResponse)
   })
 
@@ -64,7 +51,7 @@ describe('LogController Decorator', () => {
     const { sut, controllerSpy, logErrorRepositorySpy } = makeSut()
     jest.spyOn(controllerSpy, 'handle').mockReturnValueOnce(Promise.resolve(mockServerError()))
     const logSpy = jest.spyOn(logErrorRepositorySpy, 'logError')
-    await sut.handle(mockRequest())
+    await sut.handle(faker.lorem.sentence())
     expect(logSpy).toHaveBeenCalledWith('any_stack')
   })
 })
