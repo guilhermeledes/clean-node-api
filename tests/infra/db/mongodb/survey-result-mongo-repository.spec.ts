@@ -93,19 +93,19 @@ describe('SurveyResultMongoRepository', () => {
       const accountId4 = await makeAccountId()
       await surveyResultCollection.insertMany([
         mockSaveSurveyResultParams(survey, accountId1, 0),
-        mockSaveSurveyResultParams(survey, accountId2, 1),
-        mockSaveSurveyResultParams(survey, accountId3, 1),
-        mockSaveSurveyResultParams(survey, accountId4, 0)
+        mockSaveSurveyResultParams(survey, accountId2, 0),
+        mockSaveSurveyResultParams(survey, accountId3, 0),
+        mockSaveSurveyResultParams(survey, accountId4, 1)
       ])
       const sut = makeSut()
       const surveyResult = await sut.loadBySurveyId(survey.id, accountId1)
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.surveyId).toEqual(survey.id)
-      expect(surveyResult.answers[0].count).toBe(2)
-      expect(surveyResult.answers[0].percent).toBe(50)
+      expect(surveyResult.answers[0].count).toBe(3)
+      expect(surveyResult.answers[0].percent).toBe(75)
       expect(surveyResult.answers[0].isCurrentAccountAnswer).toBe(true)
-      expect(surveyResult.answers[1].count).toBe(2)
-      expect(surveyResult.answers[1].percent).toBe(50)
+      expect(surveyResult.answers[1].count).toBe(1)
+      expect(surveyResult.answers[1].percent).toBe(25)
       expect(surveyResult.answers[1].isCurrentAccountAnswer).toBe(false)
       expect(surveyResult.answers[2].count).toBe(0)
       expect(surveyResult.answers[2].percent).toBe(0)
