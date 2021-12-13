@@ -12,7 +12,7 @@ services:
       - "27017:27017"
   api:
     container_name: api-container
-    image: node:14
+    image: node:16
     working_dir: /usr/src/survey-api
     restart: always
     command: bash -c "npm install --only=prod && npm install ts-node-dev -D --no-save && npm run debug"
