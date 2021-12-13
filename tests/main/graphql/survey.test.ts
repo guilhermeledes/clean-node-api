@@ -52,7 +52,7 @@ describe('Survey GraphQL', () => {
 
     test('Should return Surveys', async () => {
       const survey = await makeSurvey()
-      const accessToken = await mockAccessToken(accountCollection, 'admin')
+      const accessToken = await mockAccessToken(accountCollection)
       const { query } = createTestClient({
         apolloServer,
         extendMockRequest: {
@@ -68,6 +68,13 @@ describe('Survey GraphQL', () => {
       expect(res.data.surveys[0].date).toBe(survey.date.toISOString())
       expect(res.data.surveys[0].didAnswer).toBe(false)
       expect(res.data.surveys[0].answers).toEqual(survey.answers)
+    })
+
+    test('Should return AccessDeniedError if no valid token is provided', async () => {
+      const { query } = createTestClient({ apolloServer })
+      const res: any = await query(surveysQuery)
+      expect(res.data).toBeFalsy()
+      expect(res.errors[0].message).toBe('Access denied')
     })
   })
 })
