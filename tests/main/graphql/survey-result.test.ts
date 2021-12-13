@@ -17,7 +17,7 @@ const makeSurvey = async (): Promise<SurveyModel> => {
   return MongoHelper.map(res.ops[0])
 }
 
-describe('Survey GraphQL', () => {
+describe('SurveyResult GraphQL', () => {
   beforeAll(async () => {
     apolloServer = makeApolloServer()
     await MongoHelper.connect(process.env.MONGO_URL)
@@ -34,23 +34,24 @@ describe('Survey GraphQL', () => {
     await accountCollection.deleteMany({})
   })
 
-  describe('Surveys Query', () => {
-    const surveysQuery = gql`
-      query surveys {
-        surveys {
-          id
+  describe('SurveyResult Query', () => {
+    const surveyResultQuery = gql`
+      query surveyResult($surveyId: String!) {
+        surveyResult (surveyId: $surveyId) {
           question
           answers {
-            answer
             image
+            answer
+            count
+            percent
+            isCurrentAccountAnswer
           }
           date
-          didAnswer
         }
       }
     `
 
-    test('Should return Surveys', async () => {
+    test('Should return SurveyResult on success', async () => {
       const survey = await makeSurvey()
       const accessToken = await mockAccessToken(accountCollection)
       const { query } = createTestClient({
@@ -61,20 +62,22 @@ describe('Survey GraphQL', () => {
           }
         }
       })
-      const res: any = await query(surveysQuery)
-      expect(res.data.surveys.length).toBe(1)
-      expect(res.data.surveys[0].id).toBe(survey.id.toString())
-      expect(res.data.surveys[0].question).toBe(survey.question)
-      expect(res.data.surveys[0].date).toBe(survey.date.toISOString())
-      expect(res.data.surveys[0].didAnswer).toBe(false)
-      expect(res.data.surveys[0].answers).toEqual(survey.answers)
-    })
-
-    test('Should return AccessDeniedError if no valid token is provided', async () => {
-      const { query } = createTestClient({ apolloServer })
-      const res: any = await query(surveysQuery)
-      expect(res.data).toBeFalsy()
-      expect(res.errors[0].message).toBe('Access denied')
+      const res: any = await query(surveyResultQuery,{
+        variables: {
+          surveyId: survey.id.toString()
+        }
+      })
+      expect(res.data.surveyResult.question).toBe(survey.question)
+      expect(res.data.surveyResult.date).toBe(survey.date.toISOString())
+      expect(res.data.surveyResult.answers).toEqual([
+        ...survey.answers.map(answer => ({
+          answer: answer.answer,
+          image: answer.image,
+          count: 0,
+          percent: 0,
+          isCurrentAccountAnswer: false
+        }))
+      ])
     })
   })
 })
