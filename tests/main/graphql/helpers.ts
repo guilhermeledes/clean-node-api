@@ -6,5 +6,6 @@ import { ApolloServer } from 'apollo-server-express'
 export const makeApolloServer = (): ApolloServer => new ApolloServer({
   typeDefs,
   resolvers,
-  schemaDirectives
+  schemaDirectives,
+  context: ({ req }) => ({ req })
 })
