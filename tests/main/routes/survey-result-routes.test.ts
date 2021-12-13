@@ -11,7 +11,7 @@ let accountCollection: Collection
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   const res = await surveyCollection.insertOne(mockAddSurveyParams())
-  return MongoHelper.map(res.ops[0])
+  return MongoHelper.map(await surveyCollection.findOne({ _id: res.insertedId }))
 }
 
 describe('Survey Routes', () => {

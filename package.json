@@ -7,18 +7,19 @@
     "repository": "github.com/guilhermeledes/survey-api",
     "scripts": {
         "start": "node dist/main/server.js",
-        "build": "rimraf dist && tsc -p tsconfig.build.json && tscpaths -p tsconfig.build.json -s ./src -o ./dist",
+        "build": "rimraf dist && tsc -p tsconfig.build.json",
         "debug": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify --inspect=0.0.0.0:9222 --exit-child ./dist/main/server.js",
         "watch": "tsc -w",
         "up": "npm run build && docker-compose up -d",
         "down": "docker-compose down",
+        "check": "npm-check -s -u",
         "clear-test": "jest --clearCache",
         "test": "jest --passWithNoTests --runInBand --no-cache",
         "test:verbose": "jest --passWithNoTests --runInBand",
-        "test:unit": "yarn test -- --watch -c jest.unit.config.js",
-        "test:integration": "yarn test -- --watch -c jest.integration.config.js",
-        "test:staged": "yarn test -- --findRelatedTests",
-        "test:ci": "yarn test -- --coverage",
+        "test:unit": "npm test -- --watch -c jest.unit.config.js",
+        "test:integration": "npm test -- --watch -c jest.integration.config.js",
+        "test:staged": "npm test -- --findRelatedTests",
+        "test:ci": "npm test -- --coverage",
         "coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
         "prepare": "husky install"
     },
@@ -31,7 +32,7 @@
         "@types/graphql-iso-date": "^3.4.0",
         "@types/jest": "^27.0.3",
         "@types/jsonwebtoken": "^8.5.6",
-        "@types/mongodb": "^3.0.*",
+        "@types/mongodb": "^4.0.7",
         "@types/node": "^16.11.12",
         "@types/supertest": "^2.0.11",
         "@types/swagger-ui-express": "^4.1.3",
@@ -58,8 +59,7 @@
         "ts-node": "^10.2.1",
         "ts-node-dev": "^1.1.8",
         "tsconfig-paths": "^3.12.0",
-        "tscpaths": "^0.0.9",
-        "typescript": "^4.5.3"
+        "typescript": "^4.5.4"
     },
     "dependencies": {
         "apollo-server-express": "^2.19.0",
@@ -71,7 +71,7 @@
         "jsonwebtoken": "^8.5.1",
         "module-alias": "^2.2.2",
         "mongo-round": "^1.0.0",
-        "mongodb": "^3.0.*",
+        "mongodb": "^4.2.2",
         "swagger-ui-express": "^4.2.0",
         "validator": "^13.6.0"
     },

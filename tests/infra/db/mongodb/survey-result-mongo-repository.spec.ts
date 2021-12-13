@@ -3,7 +3,7 @@ import { SaveSurveyResult } from '@/domain/usecases'
 import { MongoHelper, SurveyResultMongoRepository } from '@/infra/db'
 import { mockAddAccountParams, mockAddSurveyParams } from '@/tests/domain/mocks'
 import MockDate from 'mockdate'
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 
 let surveyCollection: Collection
 let surveyResultCollection: Collection
@@ -15,13 +15,13 @@ const makeSut = (): SurveyResultMongoRepository => {
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   const res = await surveyCollection.insertOne(mockAddSurveyParams())
-  const survey = await surveyCollection.findOne({ _id: res.ops[0]._id })
+  const survey = await surveyCollection.findOne({ _id: res.insertedId })
   return MongoHelper.map(survey)
 }
 
 const makeAccountId = async (): Promise<string> => {
   const res = await accountCollection.insertOne(mockAddAccountParams())
-  return res.ops[0]._id
+  return res.insertedId.toHexString()
 }
 
 const mockSaveSurveyResultParams = (survey: SurveyModel, accountId: string, answerIndex: number = 0): SaveSurveyResult.Params => ({
@@ -58,8 +58,8 @@ describe('SurveyResultMongoRepository', () => {
       const sut = makeSut()
       await sut.save(mockSaveSurveyResultParams(survey, accountId))
       const surveyResult = await surveyResultCollection.findOne({
-        surveyId: survey.id,
-        accountId
+        surveyId: new ObjectId(survey.id),
+        accountId: new ObjectId(accountId)
       })
       expect(surveyResult).toBeTruthy()
     })
@@ -76,8 +76,8 @@ describe('SurveyResultMongoRepository', () => {
         answer: newAnswer
       })
       const surveyResult = await surveyResultCollection.findOne({
-        surveyId: survey.id,
-        accountId
+        surveyId: new ObjectId(survey.id),
+        accountId: new ObjectId(accountId)
       })
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.answer).toBe(newAnswer)
@@ -92,10 +92,10 @@ describe('SurveyResultMongoRepository', () => {
       const accountId3 = await makeAccountId()
       const accountId4 = await makeAccountId()
       await surveyResultCollection.insertMany([
-        mockSaveSurveyResultParams(survey, accountId1, 0),
-        mockSaveSurveyResultParams(survey, accountId2, 0),
-        mockSaveSurveyResultParams(survey, accountId3, 0),
-        mockSaveSurveyResultParams(survey, accountId4, 1)
+        { ...mockSaveSurveyResultParams(survey, accountId1, 0), accountId: new ObjectId(accountId1) },
+        { ...mockSaveSurveyResultParams(survey, accountId2, 0), accountId: new ObjectId(accountId2) },
+        { ...mockSaveSurveyResultParams(survey, accountId3, 0), accountId: new ObjectId(accountId3) },
+        { ...mockSaveSurveyResultParams(survey, accountId4, 1), accountId: new ObjectId(accountId4) }
       ])
       const sut = makeSut()
       const surveyResult = await sut.loadBySurveyId(survey.id, accountId1)
@@ -119,9 +119,9 @@ describe('SurveyResultMongoRepository', () => {
       const accountId3 = await makeAccountId()
       const accountId4 = await makeAccountId()
       await surveyResultCollection.insertMany([
-        mockSaveSurveyResultParams(survey, accountId1, 0),
-        mockSaveSurveyResultParams(survey, accountId2, 1),
-        mockSaveSurveyResultParams(survey, accountId3, 1)
+        { ...mockSaveSurveyResultParams(survey, accountId1, 0), accountId: new ObjectId(accountId1) },
+        { ...mockSaveSurveyResultParams(survey, accountId2, 1), accountId: new ObjectId(accountId2) },
+        { ...mockSaveSurveyResultParams(survey, accountId3, 1), accountId: new ObjectId(accountId3) }
       ])
       const sut = makeSut()
       const surveyResult = await sut.loadBySurveyId(survey.id, accountId4)

@@ -14,7 +14,7 @@ let apolloServer: ApolloServer
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   const res = await surveyCollection.insertOne(mockAddSurveyParams())
-  return MongoHelper.map(res.ops[0])
+  return MongoHelper.map(await surveyCollection.findOne({ _id: res.insertedId }))
 }
 
 describe('Survey GraphQL', () => {
@@ -63,7 +63,7 @@ describe('Survey GraphQL', () => {
       })
       const res: any = await query(surveysQuery)
       expect(res.data.surveys.length).toBe(1)
-      expect(res.data.surveys[0].id).toBe(survey.id.toString())
+      expect(res.data.surveys[0].id).toBeTruthy()
       expect(res.data.surveys[0].question).toBe(survey.question)
       expect(res.data.surveys[0].date).toBe(survey.date.toISOString())
       expect(res.data.surveys[0].didAnswer).toBe(false)

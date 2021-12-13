@@ -3,7 +3,7 @@ import { MongoHelper, SurveyMongoRepository } from '@/infra/db'
 import { mockAddAccountParams, mockAddSurveyParams } from '@/tests/domain/mocks'
 import FakeObjectId from 'bson-objectid'
 import MockDate from 'mockdate'
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 
 let surveyCollection: Collection
 let surveyResultCollection: Collection
@@ -15,12 +15,12 @@ const makeSut = (): SurveyMongoRepository => {
 
 const makeAccountId = async (): Promise<string> => {
   const res = await accountCollection.insertOne(mockAddAccountParams())
-  return res.ops[0]._id
+  return res.insertedId.toHexString()
 }
 
 const makeSurvey = async (): Promise<LoadSurveyByIdRepository.Result> => {
   const res = await surveyCollection.insertOne(mockAddSurveyParams())
-  return MongoHelper.map(res.ops[0])
+  return MongoHelper.map(await surveyCollection.findOne({ _id: res.insertedId }))
 }
 describe('SurveyMongoRepository', () => {
   beforeAll(async () => {
@@ -58,7 +58,7 @@ describe('SurveyMongoRepository', () => {
       const surveyDatas: LoadSurveysRepository.Result = MongoHelper.mapCollection(await surveyCollection.find().toArray())
 
       const accountId = await makeAccountId()
-      await surveyResultCollection.insertOne({ accountId, surveyId: surveyDatas[0].id, answer: surveyDatas[0].answers[0].answer, date: new Date() })
+      await surveyResultCollection.insertOne({ accountId: new ObjectId(accountId), surveyId: new ObjectId(surveyDatas[0].id), answer: surveyDatas[0].answers[0].answer, date: new Date() })
 
       const sut = makeSut()
       const surveys = await sut.loadAll(accountId)
