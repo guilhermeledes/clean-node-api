@@ -33,7 +33,6 @@ describe('Login GraphQL', () => {
         }
       }
     `
-
     test('Should return an Account on valid credentials', async () => {
       const password = await hash('123', 12)
       await accountCollection.insertOne({
@@ -50,6 +49,23 @@ describe('Login GraphQL', () => {
       })
       expect(res.data.login.accessToken).toBeTruthy()
       expect(res.data.login.name).toBe('Ledes')
+    })
+    test('Should return UnauthorizedError on invalid credentials', async () => {
+      const password = await hash('123', 12)
+      await accountCollection.insertOne({
+        name: 'Ledes',
+        email: 'ledes@gmail.com',
+        password
+      })
+      const { query } = createTestClient({ apolloServer })
+      const res: any = await query(loginQuery, {
+        variables: {
+          email: 'ledes@gmail.com',
+          password: '12'
+        }
+      })
+      expect(res.data).toBeFalsy()
+      expect(res.errors[0].message).toBe('Unauthorized')
     })
   })
 })
