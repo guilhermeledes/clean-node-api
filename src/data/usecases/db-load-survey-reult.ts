@@ -1,4 +1,4 @@
-import { LoadSurveyByIdRepository, LoadSurveyResultRepository } from '@/data/protocols';
+import { LoadSurveyByIdRepository, LoadSurveyResultRepository } from '@/data/protocols'
 
 export class DbLoadSurveyResult {
   constructor (

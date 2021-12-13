@@ -1,6 +1,6 @@
-import { DbCheckSurveyById } from '@/data/usecases';
-import { CheckSurveyByIdRepositorySpy } from '@/tests/data/mocks';
-import faker from 'faker';
+import { DbCheckSurveyById } from '@/data/usecases'
+import { CheckSurveyByIdRepositorySpy } from '@/tests/data/mocks'
+import faker from 'faker'
 
 type SutTypes = {
   sut: DbCheckSurveyById

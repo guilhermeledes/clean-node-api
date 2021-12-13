@@ -1,6 +1,6 @@
-import { DbLoadAnswersBySurvey } from '@/data/usecases';
-import { LoadAnswersBySurveyRepositorySpy } from '@/tests/data/mocks';
-import faker from 'faker';
+import { DbLoadAnswersBySurvey } from '@/data/usecases'
+import { LoadAnswersBySurveyRepositorySpy } from '@/tests/data/mocks'
+import faker from 'faker'
 
 type SutTypes = {
   sut: DbLoadAnswersBySurvey
@@ -17,7 +17,6 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbLoadAnswersBySurvey', () => {
-
   let surveyId: string
   beforeEach(() => {
     surveyId = faker.datatype.uuid()

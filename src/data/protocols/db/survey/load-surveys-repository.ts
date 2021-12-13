@@ -1,4 +1,4 @@
-import { LoadSurveys } from '@/domain/usecases';
+import { LoadSurveys } from '@/domain/usecases'
 
 export interface LoadSurveysRepository {
   loadAll: (accountId: string) => Promise<LoadSurveysRepository.Result>

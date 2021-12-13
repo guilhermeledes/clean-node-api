@@ -1,8 +1,8 @@
-import { DbLoadSurveyResult } from '@/data/usecases';
-import { MongoHelper } from '@/infra/db';
-import { LoadSurveyByIdRepositorySpy, LoadSurveyResultRepositorySpy } from '@/tests/data/mocks';
-import faker from 'faker';
-import MockDate from 'mockdate';
+import { DbLoadSurveyResult } from '@/data/usecases'
+import { MongoHelper } from '@/infra/db'
+import { LoadSurveyByIdRepositorySpy, LoadSurveyResultRepositorySpy } from '@/tests/data/mocks'
+import faker from 'faker'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   sut: DbLoadSurveyResult

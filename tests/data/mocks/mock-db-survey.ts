@@ -1,6 +1,6 @@
-import { AddSurveyRepository, CheckSurveyByIdRepository, LoadAnswersBySurveyRepository, LoadSurveyByIdRepository, LoadSurveysRepository } from '@/data/protocols';
-import { mockSurveyModel, mockSurveyModels } from '@/tests/domain/mocks';
-import faker from 'faker';
+import { AddSurveyRepository, CheckSurveyByIdRepository, LoadAnswersBySurveyRepository, LoadSurveyByIdRepository, LoadSurveysRepository } from '@/data/protocols'
+import { mockSurveyModel, mockSurveyModels } from '@/tests/domain/mocks'
+import faker from 'faker'
 
 export class AddSurveyRepositorySpy implements AddSurveyRepository {
   params: AddSurveyRepository.Params

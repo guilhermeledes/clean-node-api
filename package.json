@@ -1,13 +1,13 @@
 {
-    "name": "clean-node-api",
+    "name": "survey-api",
     "version": "3.1.0",
     "main": "index.js",
     "author": "Guilherme Ledes <ledes.guilherme@gmail.com>",
     "license": "MIT",
-    "repository": "github.com/guilhermeledes/clean-node-api",
+    "repository": "github.com/guilhermeledes/survey-api",
     "scripts": {
         "start": "node dist/main/server.js",
-        "build": "rimraf dist && tsc -p tsconfig.build.json",
+        "build": "rimraf dist && tsc -p tsconfig.build.json && tscpaths -p tsconfig.build.json -s ./src -o ./dist",
         "debug": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify --inspect=0.0.0.0:9222 --exit-child ./dist/main/server.js",
         "watch": "tsc -w",
         "up": "npm run build && docker-compose up -d",
@@ -55,6 +55,8 @@
         "ts-jest": "^27.0.5",
         "ts-node": "^10.2.1",
         "ts-node-dev": "^1.1.8",
+        "tsconfig-paths": "^3.12.0",
+        "tscpaths": "^0.0.9",
         "typescript": "^4.4.3"
     },
     "dependencies": {
