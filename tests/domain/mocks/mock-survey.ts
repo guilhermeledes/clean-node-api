@@ -29,6 +29,6 @@ export const mockSurveyModel = (): SurveyModel => (
   })
 
 export const mockSurveyAnswerModel = (): SurveyAnswerModel => ({
-  answer: faker.random.word(),
+  answer: `${faker.random.word()} ${faker.datatype.number()}`,
   image: faker.image.imageUrl()
 })
