@@ -20,7 +20,7 @@ jobs:
       - name: ESLint
         run: npx eslint 'src/**'
       - name: Create coverage
-        run: npm run coveralls
+        run: npm run test:ci
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:

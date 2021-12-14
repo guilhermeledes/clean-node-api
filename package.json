@@ -20,7 +20,6 @@
         "test:integration": "npm test -- --watch -c jest.integration.config.js",
         "test:staged": "npm test -- --findRelatedTests",
         "test:ci": "npm test -- --coverage",
-        "coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
         "prepare": "husky install"
     },
     "devDependencies": {
@@ -38,7 +37,6 @@
         "@typescript-eslint/eslint-plugin": "^5.7.0",
         "@typescript-eslint/parser": "^5.7.0",
         "bson-objectid": "^2.0.1",
-        "coveralls": "^3.1.1",
         "eslint": "^8.4.1",
         "eslint-config-standard-with-typescript": "^21.0.1",
         "eslint-plugin-import": "^2.25.3",
