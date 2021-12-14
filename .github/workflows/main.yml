@@ -18,7 +18,7 @@ jobs:
           npm set-script prepare ""
           npm ci
       - name: ESLint
-        run: eslint 'src/**'
+        run: npx eslint 'src/**'
       - name: Create coverage
         run: npm run coveralls
       - name: Coveralls
