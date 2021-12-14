@@ -1,11 +1,13 @@
 import { SurveyModel } from '@/domain/models'
 import { MongoHelper } from '@/infra/db'
-import app from '@/main/config/app'
+import { setupApp } from '@/main/config/app'
 import { mockAddSurveyParams } from '@/tests/domain/mocks'
 import { mockAccessToken } from '@/tests/main/mocks'
+import { Express } from 'express'
 import { Collection } from 'mongodb'
 import request from 'supertest'
 
+let app: Express
 let surveyCollection: Collection
 let accountCollection: Collection
 
@@ -16,6 +18,7 @@ const makeSurvey = async (): Promise<SurveyModel> => {
 
 describe('SurveyResult GraphQL', () => {
   beforeAll(async () => {
+    app = await setupApp()
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 

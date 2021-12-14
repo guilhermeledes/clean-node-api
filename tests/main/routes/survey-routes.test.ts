@@ -1,16 +1,19 @@
 import { MongoHelper } from '@/infra/db'
-import app from '@/main/config/app'
+import { setupApp } from '@/main/config/app'
 import { mockAddSurveyParams } from '@/tests/domain/mocks'
 import { mockAccessToken } from '@/tests/main/mocks'
+import { Express } from 'express'
 import faker from 'faker'
 import { Collection } from 'mongodb'
 import request from 'supertest'
 
+let app: Express
 let surveyCollection: Collection
 let accountCollection: Collection
 
 describe('Survey Routes', () => {
   beforeAll(async () => {
+    app = await setupApp()
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 
