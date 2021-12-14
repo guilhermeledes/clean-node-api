@@ -14,5 +14,12 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - run: npm install
-      - run: npm run coveralls
+      - name: npm install, make test-coverage
+        run: |
+          npm set-script prepare ""
+          npm ci
+          npm run coveralls
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
